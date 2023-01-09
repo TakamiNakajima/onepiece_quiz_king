@@ -20,12 +20,9 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 50),
+                Expanded(child: Image.asset("assets/images/strowhat.png")),
                 _titleText(),
-                SizedBox(height: 50),
-                SizedBox(height: 200,child: Image.asset("assets/images/luffy.png")),
-                //横線
-                Divider(height: 100, indent: 20, endIndent: 20, thickness: 1),
+                SizedBox(height: 120),
                 //スタートボタン
                 ButtonWithIcon(
                     onPressed: () => _startTestScreen(context),
@@ -34,11 +31,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.orangeAccent),
                 //ラジオボタン
                 // _radioButtons(),
-                SizedBox(height: 100),
+                SizedBox(height: 120),
                 //コピーライト
-                Text("powered by Takami Nakajima 2022",
+                Text("powered by Takami Nakajima 2023",
                     style: TextStyle(fontSize: 14, fontFamily: "Mont")),
-                SizedBox(height: 50),
+                SizedBox(height: 30),
               ],
             ),
           ),
@@ -50,8 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _titleText() {
     return Column(
       children: [
-        Text("ワンピース", style: TextStyle(fontSize: 50)),
-        Text("クイズ王", style: TextStyle(fontSize: 50)),
+        Text("麦ちゃん", style: TextStyle(fontSize: 56, color: Colors.orange)),
+        SizedBox(height: 16),
+        Text("クイズ", style: TextStyle(fontSize: 56, color: Colors.orange)),
+        SizedBox(height: 16),
+        Text("-Quiz of Mugichan-", style: TextStyle(fontSize: 20, color: Colors.orange)),
+
       ],
     );
   }

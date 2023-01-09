@@ -37,9 +37,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "ワンピースクイズ王",
-      theme: ThemeData(brightness: Brightness.dark, fontFamily: "Lanobe"),
+      title: "麦ちゃんクイズ",
+      theme: ThemeData(brightness: Brightness.light, fontFamily: "Lanobe"),
       home: HomeScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -62,6 +62,7 @@ class _TestScreenState extends State<TestScreen> {
       appBar: AppBar(
         title: Text("ワンピースクイズ"),
         centerTitle: true,
+        backgroundColor: Colors.orange,
       ),
       floatingActionButton: (isFabVisible && _testDataList.isNotEmpty)
           ? FloatingActionButton(
@@ -81,7 +82,6 @@ class _TestScreenState extends State<TestScreen> {
               SizedBox(height: 20),
               //問題カード表示部分
               _questionCardPart(),
-              SizedBox(height: 30),
               //こたえカード表示部分
               _answerCardPart(),
               SizedBox(height: 10),
@@ -100,7 +100,7 @@ class _TestScreenState extends State<TestScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("のこり問題数", style: TextStyle(fontSize: 14)),
+        Text("のこり問題数", style: TextStyle(fontSize: 14, color: Colors.grey[800])),
         SizedBox(width: 20),
         Text(_numberOfQuestion.toString(), style: TextStyle(fontSize: 24)),
       ],
@@ -117,11 +117,11 @@ class _TestScreenState extends State<TestScreen> {
           width: double.infinity,
           height: 250,
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.white),
+            border: Border.all(color: Colors.orangeAccent),
             borderRadius: BorderRadius.circular(5),
           ),
           child: Container(
-            child: Text(_txtQuestion, style: TextStyle(fontSize: 20)),
+            child: Text(_txtQuestion, style: TextStyle(fontSize: 18, color: Colors.grey[800])),
           ),
         ),
       );
@@ -134,21 +134,18 @@ class _TestScreenState extends State<TestScreen> {
   Widget _answerCardPart() {
     if (isAnswerCardVisible) {
       return Padding(
-        padding: const EdgeInsets.only(left: 20, right: 22),
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          width: double.infinity,
-          height: 70,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.orangeAccent),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Container(
-            child: Center(
-                child: Text(_txtAnswer,
-                    style: TextStyle(fontSize: 20, color: Colors.orangeAccent))),
-          ),
-        ),
+        padding: const EdgeInsets.all(40.0),
+        child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("答え",
+                    style: TextStyle(fontSize: 20, color: Colors.grey[800])),
+                SizedBox(height: 32),
+                Text("$_txtAnswer",
+                    style: TextStyle(fontSize: 30, color: Colors.orange, decoration: TextDecoration.underline)),
+              ],
+            )),
       );
     } else {
       return Container();
@@ -227,7 +224,7 @@ class _TestScreenState extends State<TestScreen> {
 
   Widget _endMessage() {
     if(TestStatus == TestStatus.FINISHED) {
-      return Center(child: Text("クイズ終了", style: TextStyle(fontSize: 60)));
+      return Center(child: Text("クイズ終了", style: TextStyle(fontSize: 60, color: Colors.grey[800])));
     } else {
       return Container();
     }

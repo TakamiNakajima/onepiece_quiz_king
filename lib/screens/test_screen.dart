@@ -60,16 +60,16 @@ class _TestScreenState extends State<TestScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ワンピースクイズ"),
+        title: Text("麦わらクイズ"),
         centerTitle: true,
-        backgroundColor: Colors.orange,
+        backgroundColor: Color(0xfffcb860),
       ),
       floatingActionButton: (isFabVisible && _testDataList.isNotEmpty)
           ? FloatingActionButton(
               onPressed: () => _goNextStatus(),
               child: Icon(Icons.skip_next),
               tooltip: "次にすすむ",
-              backgroundColor: Colors.orangeAccent,
+              backgroundColor: Color(0xfffcb860),
             )
           : null,
       body: Stack(
@@ -117,7 +117,7 @@ class _TestScreenState extends State<TestScreen> {
           width: double.infinity,
           height: 250,
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.orangeAccent),
+            border: Border.all(color: Color(0xfffcb860)),
             borderRadius: BorderRadius.circular(5),
           ),
           child: Container(
@@ -143,7 +143,7 @@ class _TestScreenState extends State<TestScreen> {
                     style: TextStyle(fontSize: 20, color: Colors.grey[800])),
                 SizedBox(height: 32),
                 Text("$_txtAnswer",
-                    style: TextStyle(fontSize: 30, color: Colors.orange, decoration: TextDecoration.underline)),
+                    style: TextStyle(fontSize: 30, color: Color(0xfffcb860), decoration: TextDecoration.underline)),
               ],
             )),
       );

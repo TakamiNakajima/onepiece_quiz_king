@@ -53,11 +53,11 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/strowhat.png"
+  image_path: "assets/images/hat.png"
   remove_alpha_ios: true
 
   adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/images/strowhat.png"
+  adaptive_icon_foreground: "assets/images/hat.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

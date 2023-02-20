@@ -20,22 +20,26 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(child: Image.asset("assets/images/strowhat.png")),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 64.0),
+                  child: Expanded(child: Image.asset("assets/images/hat.png")),
+                ),
+                SizedBox(height: 40),
                 _titleText(),
-                SizedBox(height: 120),
+                SizedBox(height: 80),
                 //スタートボタン
                 ButtonWithIcon(
                     onPressed: () => _startTestScreen(context),
                     icon: Icon(Icons.play_arrow),
                     label: "スタート",
-                    color: Colors.orangeAccent),
+                    color: Color(0xfffcb860)),
                 //ラジオボタン
                 // _radioButtons(),
-                SizedBox(height: 120),
+                SizedBox(height: 80),
                 //コピーライト
                 Text("powered by Takami Nakajima 2023",
                     style: TextStyle(fontSize: 14, fontFamily: "Mont")),
-                SizedBox(height: 30),
+                SizedBox(height: 20),
               ],
             ),
           ),
@@ -47,11 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _titleText() {
     return Column(
       children: [
-        Text("麦ちゃん", style: TextStyle(fontSize: 56, color: Colors.orange)),
+        Text("麦わらクイズ", style: TextStyle(fontSize: 48, color: Color(0xfffcb860))),
         SizedBox(height: 16),
-        Text("クイズ", style: TextStyle(fontSize: 56, color: Colors.orange)),
-        SizedBox(height: 16),
-        Text("-Quiz of Mugichan-", style: TextStyle(fontSize: 20, color: Colors.orange)),
+        Text("-Quiz of Mugiwara-", style: TextStyle(fontSize: 20, color: Color(0xfffcb860))),
 
       ],
     );

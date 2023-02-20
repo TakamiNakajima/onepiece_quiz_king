@@ -21,9 +21,10 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(child: Image.asset("assets/images/hat.png")),
+                Image.asset("assets/images/hat2.png"),
+                SizedBox(height: 24),
                 _titleText(),
-                SizedBox(height: 160),
+                SizedBox(height: 180),
                 //スタートボタン
                 ButtonWithIcon(
                     onPressed: () => _startTestScreen(context),
@@ -32,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Color(0xfffcb860)),
                 //ラジオボタン
                 // _radioButtons(),
-                SizedBox(height: 150),
+                SizedBox(height: 80),
                 //コピーライト
                 Text("powered by Takami Nakajima 2023",
                     style: TextStyle(fontSize: 14, fontFamily: "Mont")),

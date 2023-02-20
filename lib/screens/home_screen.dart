@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Expanded(child: Image.asset("assets/images/hat.png")),
                 _titleText(),
-                SizedBox(height: 120),
+                SizedBox(height: 160),
                 //スタートボタン
                 ButtonWithIcon(
                     onPressed: () => _startTestScreen(context),
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Color(0xfffcb860)),
                 //ラジオボタン
                 // _radioButtons(),
-                SizedBox(height: 80),
+                SizedBox(height: 150),
                 //コピーライト
                 Text("powered by Takami Nakajima 2023",
                     style: TextStyle(fontSize: 14, fontFamily: "Mont")),

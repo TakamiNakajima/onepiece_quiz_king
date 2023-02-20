@@ -59,6 +59,7 @@ class _TestScreenState extends State<TestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffffffff),
       appBar: AppBar(
         title: Text("麦わらクイズ"),
         centerTitle: true,

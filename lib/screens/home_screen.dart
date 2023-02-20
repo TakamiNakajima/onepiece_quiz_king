@@ -13,6 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffffffff),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -21,9 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(child: Image.asset("assets/images/hat.png")),
-                SizedBox(height: 40),
                 _titleText(),
-                SizedBox(height: 80),
+                SizedBox(height: 120),
                 //スタートボタン
                 ButtonWithIcon(
                     onPressed: () => _startTestScreen(context),

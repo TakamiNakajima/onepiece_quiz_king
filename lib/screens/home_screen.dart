@@ -20,10 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 64.0),
-                  child: Expanded(child: Image.asset("assets/images/hat.png")),
-                ),
+                Expanded(child: Image.asset("assets/images/hat.png")),
                 SizedBox(height: 40),
                 _titleText(),
                 SizedBox(height: 80),

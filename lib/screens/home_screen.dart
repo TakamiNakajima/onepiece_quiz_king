@@ -16,28 +16,29 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Color(0xffffffff),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.symmetric(vertical: 64),
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.asset("assets/images/hat2.png"),
-                SizedBox(height: 24),
-                _titleText(),
-                SizedBox(height: 180),
+                Container(
+                  child: Column(
+                    children: [
+                      Image.asset("assets/images/hat2.png"),
+                      SizedBox(height: 24),
+                      _titleText(),
+                    ],
+                  ),
+                ),
                 //スタートボタン
                 ButtonWithIcon(
                     onPressed: () => _startTestScreen(context),
                     icon: Icon(Icons.play_arrow),
                     label: "スタート",
                     color: Color(0xfffcb860)),
-                //ラジオボタン
-                // _radioButtons(),
-                SizedBox(height: 80),
                 //コピーライト
                 Text("powered by Takami Nakajima 2023",
                     style: TextStyle(fontSize: 14, fontFamily: "Mont")),
-                SizedBox(height: 20),
               ],
             ),
           ),

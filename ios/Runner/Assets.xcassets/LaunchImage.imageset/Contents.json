@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "hat.png",
+      "filename" : "iTunesArtwork@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "hat 1.png",
+      "filename" : "iTunesArtwork@1x 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "hat 2.png",
+      "filename" : "iTunesArtwork@1x 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

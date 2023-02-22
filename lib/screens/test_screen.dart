@@ -144,7 +144,7 @@ class _TestScreenState extends State<TestScreen> {
                     style: TextStyle(fontSize: 20, color: Colors.grey[800])),
                 SizedBox(height: 32),
                 Text("$_txtAnswer",
-                    style: TextStyle(fontSize: 30, color: Color(0xfffcb860), decoration: TextDecoration.underline)),
+                    style: TextStyle(fontSize: 30, color: Color(0xfffb5f66), decoration: TextDecoration.underline)),
               ],
             )),
       );

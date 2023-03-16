@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onepiece_quiz_king/data/series.dart';
 import 'package:onepiece_quiz_king/parts/button_with_icon.dart';
 import 'package:onepiece_quiz_king/screens/test_screen.dart';
 
@@ -9,6 +10,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isIncludedMemorizedWords = false;
+  SERIES _selectedSeries = SERIES.ALL;
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +32,37 @@ class _HomeScreenState extends State<HomeScreen> {
                       _titleText(),
                     ],
                   ),
+                ),
+                DropdownButton(
+                  alignment: Alignment.center,
+                  style: TextStyle(color: Color(0xfffcb860), fontSize: 16, fontWeight: FontWeight.bold),
+                    iconEnabledColor: Color(0xfffcb860),
+                    iconSize: 40,
+                  elevation: 8,
+                  borderRadius: BorderRadius.circular(14),
+                  underline: Container(
+                    height: 1,
+                    color: Color(0xfffcb860),
+                  ),
+                    items: [
+                      DropdownMenuItem<SERIES>(value: SERIES.ALL, child: Text("すべての問題")),
+                      DropdownMenuItem<SERIES>(value: SERIES.EASTBLUE, child: Text("イーストブルー編")),
+                      DropdownMenuItem<SERIES>(value: SERIES.ALABASTA, child: Text("アラバスタ編")),
+                      DropdownMenuItem<SERIES>(value: SERIES.SKYISLAND, child: Text("ジャヤ & 空島編")),
+                      DropdownMenuItem<SERIES>(value: SERIES.WATERSEVEN, child: Text("ウォーターセブン & エニエスロビー編")),
+                      DropdownMenuItem<SERIES>(value: SERIES.THRILLERBARK, child: Text("スリラーバーク & シャボンディ諸島編")),
+                      DropdownMenuItem<SERIES>(value: SERIES.IMPELDOWN, child: Text("インペルダウン & マリンフォード編")),
+                      DropdownMenuItem<SERIES>(value: SERIES.FISHMANISLAND, child: Text("魚人島 & パンクハザード編")),
+                      DropdownMenuItem<SERIES>(value: SERIES.DRESSROSA, child: Text("ドレスローザ編")),
+                      DropdownMenuItem<SERIES>(value: SERIES.WHOLECAKEISLAND, child: Text("ゾウ & ホールケーキアイランド編")),
+                      DropdownMenuItem<SERIES>(value: SERIES.WANOKUNI, child: Text("ワノ国編")),
+                    ],
+                    value: _selectedSeries,
+                    onChanged: (selectedValue){
+                      setState(() {
+                        _selectedSeries = selectedValue!;
+                      });
+                    },
                 ),
                 //スタートボタン
                 ButtonWithIcon(
@@ -53,39 +87,12 @@ class _HomeScreenState extends State<HomeScreen> {
         Text("麦わらクイズ", style: TextStyle(fontSize: 48, color: Color(0xfffcb860))),
         SizedBox(height: 16),
         Text("-Quiz of Mugiwara-", style: TextStyle(fontSize: 20, color: Color(0xfffcb860))),
-
       ],
     );
   }
 
-  // Widget _radioButtons() {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(left: 50),
-  //     child: Column(
-  //       children: [
-  //         RadioListTile(
-  //             title: Text("正解した問題を除外", style: TextStyle(fontSize: 20)),
-  //             value: false,
-  //             groupValue: isIncludedMemorizedWords,
-  //             onChanged: (value) => _onRadioSelected(value)),
-  //         RadioListTile(
-  //             title: Text("すべての問題", style: TextStyle(fontSize: 20)),
-  //             value: true,
-  //             groupValue: isIncludedMemorizedWords,
-  //             onChanged: (value) => _onRadioSelected(value)),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  _onRadioSelected(bool? value) {
-    setState(() {
-      isIncludedMemorizedWords = value!;
-    });
-  }
-
   _startTestScreen(BuildContext context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => TestScreen(isIncludedMemorizedWords: isIncludedMemorizedWords)));
+        context, MaterialPageRoute(builder: (context) => TestScreen(series: _selectedSeries)));
   }
 }

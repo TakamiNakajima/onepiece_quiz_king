@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:onepiece_quiz_king/data/series.dart';
 import 'package:onepiece_quiz_king/db/database.dart';
 import 'package:onepiece_quiz_king/main.dart';
 
 enum TestStatus { BEFORE_START, SHOW_QUESTION, SHOW_ANSWER, FINISHED }
 
 class TestScreen extends StatefulWidget {
-  final bool isIncludedMemorizedWords;
+  SERIES series;
 
-  TestScreen({required this.isIncludedMemorizedWords});
+  TestScreen({required this.series});
 
   @override
   State<TestScreen> createState() => _TestScreenState();
@@ -17,7 +18,6 @@ class _TestScreenState extends State<TestScreen> {
   int _numberOfQuestion = 0;
   String _txtQuestion = "問題";
   String _txtAnswer = "こたえ";
-  bool _isMemorized = false;
 
   bool isQuestionCardVisible = false;
   bool isAnswerCardVisible = false;
@@ -37,10 +37,28 @@ class _TestScreenState extends State<TestScreen> {
   }
 
   void _getTestData() async {
-    if (widget.isIncludedMemorizedWords) {
+    if (widget.series == SERIES.ALL) {
       _testDataList = await database.allWords;
-    } else {
-      _testDataList = await database.allWordsExcludedMemorized;
+    } else if (widget.series == SERIES.EASTBLUE) {
+      _testDataList = await database.seriesOfEastBlue;
+    } else if (widget.series == SERIES.ALABASTA) {
+      _testDataList = await database.seriesOfAlaBasta;
+    } else if (widget.series == SERIES.SKYISLAND) {
+      _testDataList = await database.seriesOfSkyIsland;
+    } else if (widget.series == SERIES.WATERSEVEN) {
+      _testDataList = await database.seriesOfWaterSeven;
+    } else if (widget.series == SERIES.THRILLERBARK) {
+      _testDataList = await database.seriesOfThrillerBark;
+    } else if (widget.series == SERIES.IMPELDOWN) {
+      _testDataList = await database.seriesOfImpelDown;
+    } else if (widget.series == SERIES.FISHMANISLAND) {
+      _testDataList = await database.seriesOfFishmanIsland;
+    } else if (widget.series == SERIES.DRESSROSA) {
+      _testDataList = await database.seriesOfDressRosa;
+    } else if (widget.series == SERIES.WHOLECAKEISLAND) {
+      _testDataList = await database.seriesOfWholeCakeIsland;
+    } else if (widget.series == SERIES.WANOKUNI) {
+      _testDataList = await database.seriesOfWaNoKuni;
     }
     _testDataList.shuffle();
     _testStatus = TestStatus.BEFORE_START;
@@ -61,17 +79,17 @@ class _TestScreenState extends State<TestScreen> {
     return Scaffold(
       backgroundColor: Color(0xffffffff),
       appBar: AppBar(
-        title: Text("麦わらクイズ"),
+        title: _titleText(),
         centerTitle: true,
         backgroundColor: Color(0xfffcb860),
       ),
       floatingActionButton: (isFabVisible && _testDataList.isNotEmpty)
           ? FloatingActionButton(
-              onPressed: () => _goNextStatus(),
-              child: Icon(Icons.skip_next),
-              tooltip: "次にすすむ",
-              backgroundColor: Color(0xfffcb860),
-            )
+        onPressed: () => _goNextStatus(),
+        child: Icon(Icons.skip_next),
+        tooltip: "次にすすむ",
+        backgroundColor: Color(0xfffcb860),
+      )
           : null,
       body: Stack(
         children: [
@@ -122,7 +140,8 @@ class _TestScreenState extends State<TestScreen> {
             borderRadius: BorderRadius.circular(5),
           ),
           child: Container(
-            child: Text(_txtQuestion, style: TextStyle(fontSize: 18, color: Colors.grey[800])),
+            child: Text(_txtQuestion,
+                style: TextStyle(fontSize: 18, color: Colors.grey[800])),
           ),
         ),
       );
@@ -144,7 +163,9 @@ class _TestScreenState extends State<TestScreen> {
                     style: TextStyle(fontSize: 20, color: Colors.grey[800])),
                 SizedBox(height: 32),
                 Text("$_txtAnswer",
-                    style: TextStyle(fontSize: 30, color: Color(0xfffb5f66), decoration: TextDecoration.underline)),
+                    style: TextStyle(fontSize: 30,
+                        color: Color(0xfffb5f66),
+                        decoration: TextDecoration.underline)),
               ],
             )),
       );
@@ -183,7 +204,7 @@ class _TestScreenState extends State<TestScreen> {
         _showAnswer();
         break;
       case TestStatus.SHOW_ANSWER:
-        // await _updateMemorizedFlag();
+      // await _updateMemorizedFlag();
         if (_numberOfQuestion <= 0) {
           setState(() {
             isFabVisible = false;
@@ -220,22 +241,42 @@ class _TestScreenState extends State<TestScreen> {
       isFabVisible = true;
     });
     _txtAnswer = _currentWord.strAnswer;
-    _isMemorized = _currentWord.isMemorized;
+    // _isMemorized = _currentWord.isMemorized;
   }
 
   Widget _endMessage() {
-    if(TestStatus == TestStatus.FINISHED) {
-      return Center(child: Text("クイズ終了", style: TextStyle(fontSize: 60, color: Colors.grey[800])));
+    if (TestStatus == TestStatus.FINISHED) {
+      return Center(child: Text(
+          "クイズ終了", style: TextStyle(fontSize: 60, color: Colors.grey[800])));
     } else {
       return Container();
     }
   }
 
-  // Future<void> _updateMemorizedFlag() async {
-  //   var updateWord = Word(
-  //       strQuestion: _currentWord.strQuestion,
-  //       strAnswer: _currentWord.strAnswer,
-  //       isMemorized: _isMemorized);
-  //   await database.updateWord(updateWord);
-  // }
+  Widget _titleText() {
+    if (widget.series == SERIES.ALL) {
+      return Text("すべての問題", style: TextStyle(fontSize: 18));
+    } else if (widget.series == SERIES.EASTBLUE) {
+      return Text("イーストブルー編", style: TextStyle(fontSize: 18));
+    } else if (widget.series == SERIES.ALABASTA) {
+      return Text("アラバスタ編", style: TextStyle(fontSize: 18));
+    } else if (widget.series == SERIES.SKYISLAND) {
+      return Text("ジャヤ,空島編", style: TextStyle(fontSize: 18));
+    } else if (widget.series == SERIES.WATERSEVEN) {
+      return Text("ウォーターセブン,エニエスロビー編", style: TextStyle(fontSize: 18));
+    } else if (widget.series == SERIES.THRILLERBARK) {
+      return Text("スリラーバーク,シャボンディ諸島編", style: TextStyle(fontSize: 18));
+    } else if (widget.series == SERIES.IMPELDOWN) {
+      return Text("インペルダウン,マリンフォード編", style: TextStyle(fontSize: 18));
+    } else if (widget.series == SERIES.FISHMANISLAND) {
+      return Text("魚人島,パンクハザード編", style: TextStyle(fontSize: 18));
+    } else if (widget.series == SERIES.DRESSROSA) {
+      return Text("ドレスローザ編", style: TextStyle(fontSize: 18));
+    } else if (widget.series == SERIES.WHOLECAKEISLAND) {
+      return Text("ゾウ,ホールケーキアイランド編", style: TextStyle(fontSize: 18));
+    } else if (widget.series == SERIES.WANOKUNI) {
+      return Text("ワノ国編", style: TextStyle(fontSize: 18));
+    }
+    return Text("麦わらクイズ", style: TextStyle(fontSize: 18));
+  }
 }

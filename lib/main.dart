@@ -6,7 +6,6 @@ import 'package:onepiece_quiz_king/db/database.dart';
 import 'package:onepiece_quiz_king/screens/home_screen.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:onepiece_quiz_king/db/database.dart';
 
 late MyDatabase database;
 
@@ -23,7 +22,7 @@ Future<String> getDbPath() async {
   var dbPath = join(dbDir.path, "words.db");
 
   if (FileSystemEntity.typeSync(dbPath) == FileSystemEntityType.notFound) {
-    ByteData byteData = await rootBundle.load("assets/db/words1.db");
+    ByteData byteData = await rootBundle.load("assets/db/words.db");
     List<int> bytes = byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);
     await File(dbPath).writeAsBytes(bytes);
   }

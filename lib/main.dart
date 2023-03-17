@@ -21,11 +21,11 @@ Future<String> getDbPath() async {
   var dbDir = await getApplicationDocumentsDirectory();
   var dbPath = join(dbDir.path, "words.db");
 
-  if (FileSystemEntity.typeSync(dbPath) == FileSystemEntityType.notFound) {
+  // if (FileSystemEntity.typeSync(dbPath) == FileSystemEntityType.notFound) {
     ByteData byteData = await rootBundle.load("assets/db/words.db");
     List<int> bytes = byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);
     await File(dbPath).writeAsBytes(bytes);
-  }
+  // }
   return dbPath;
 }
 

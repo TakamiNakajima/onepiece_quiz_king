@@ -3,6 +3,8 @@ import 'package:onepiece_quiz_king/data/series.dart';
 import 'package:onepiece_quiz_king/parts/button_with_icon.dart';
 import 'package:onepiece_quiz_king/screens/test_screen.dart';
 
+import '../const/dropdownitems.dart';
+
 class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -34,25 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 DropdownButton(
-                  alignment: Alignment.center,
+                alignment: Alignment.center,
                   style: TextStyle(color: Color(0xfffb5f66), fontSize: 16, fontFamily: "Lanobe"),
                     iconEnabledColor: Color(0xfffb5f66),
                     iconSize: 40,
                   elevation: 8,
                   borderRadius: BorderRadius.circular(14),
-                    items: [
-                      DropdownMenuItem<SERIES>(value: SERIES.ALL, child: Text("すべての問題")),
-                      DropdownMenuItem<SERIES>(value: SERIES.EASTBLUE, child: Text("イーストブルー編")),
-                      DropdownMenuItem<SERIES>(value: SERIES.ALABASTA, child: Text("アラバスタ編")),
-                      DropdownMenuItem<SERIES>(value: SERIES.SKYISLAND, child: Text("ジャヤ&空島編")),
-                      DropdownMenuItem<SERIES>(value: SERIES.WATERSEVEN, child: Text("ウォーターセブン&エニエスロビー編")),
-                      DropdownMenuItem<SERIES>(value: SERIES.THRILLERBARK, child: Text("スリラーバーク&シャボンディ諸島編")),
-                      DropdownMenuItem<SERIES>(value: SERIES.IMPELDOWN, child: Text("インペルダウン&マリンフォード編")),
-                      DropdownMenuItem<SERIES>(value: SERIES.FISHMANISLAND, child: Text("魚人島 & パンクハザード編")),
-                      DropdownMenuItem<SERIES>(value: SERIES.DRESSROSA, child: Text("ドレスローザ編")),
-                      DropdownMenuItem<SERIES>(value: SERIES.WHOLECAKEISLAND, child: Text("ゾウ&ホールケーキアイランド編")),
-                      DropdownMenuItem<SERIES>(value: SERIES.WANOKUNI, child: Text("ワノ国編")),
-                    ],
+                    items: DropDownItemList,
                     value: _selectedSeries,
                     onChanged: (selectedValue){
                       setState(() {

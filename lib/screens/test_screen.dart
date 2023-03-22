@@ -39,6 +39,14 @@ class _TestScreenState extends State<TestScreen> {
   void _getTestData() async {
     if (widget.series == SERIES.ALL) {
       _testDataList = await database.allWords;
+    } else if (widget.series == SERIES.LEVEL1) {
+      _testDataList = await database.allWordsOflevel1;
+    } else if (widget.series == SERIES.LEVEL2) {
+      _testDataList = await database.allWordsOflevel2;
+    } else if (widget.series == SERIES.LEVEL3) {
+      _testDataList = await database.allWordsOflevel3;
+    } else if (widget.series == SERIES.LEVEL4) {
+      _testDataList = await database.allWordsOflevel4;
     } else if (widget.series == SERIES.EASTBLUE) {
       _testDataList = await database.seriesOfEastBlue;
     } else if (widget.series == SERIES.ALABASTA) {
@@ -119,9 +127,9 @@ class _TestScreenState extends State<TestScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("のこり問題数", style: TextStyle(fontSize: 14, color: Colors.grey[800])),
-        SizedBox(width: 20),
-        Text(_numberOfQuestion.toString(), style: TextStyle(fontSize: 24)),
+        Text("残り", style: TextStyle(fontSize: 16, fontFamily: "Mont")),
+        SizedBox(width: 8),
+        Text(_numberOfQuestion.toString(), style: TextStyle(fontSize: 20, fontFamily: "Mont", fontWeight: FontWeight.w600)),
       ],
     );
   }
@@ -132,7 +140,7 @@ class _TestScreenState extends State<TestScreen> {
       return Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: Container(
-          padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.all(12),
           width: double.infinity,
           height: 250,
           decoration: BoxDecoration(
@@ -140,8 +148,15 @@ class _TestScreenState extends State<TestScreen> {
             borderRadius: BorderRadius.circular(5),
           ),
           child: Container(
-            child: Text(_txtQuestion,
-                style: TextStyle(fontSize: 18, color: Colors.grey[800])),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(_txtQuestion,
+                    style: TextStyle(fontSize: 20, color: Colors.grey[800])),
+                SizedBox(height: 10),
+                _questionLevelText(),
+              ],
+            ),
           ),
         ),
       );
@@ -154,16 +169,15 @@ class _TestScreenState extends State<TestScreen> {
   Widget _answerCardPart() {
     if (isAnswerCardVisible) {
       return Padding(
-        padding: const EdgeInsets.all(40.0),
+        padding: const EdgeInsets.all(24.0),
         child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("答え",
-                    style: TextStyle(fontSize: 20, color: Colors.grey[800])),
-                SizedBox(height: 32),
+                Text("答え", style: TextStyle(fontSize: 16, fontFamily: "Mont")),
+                SizedBox(height: 24),
                 Text("$_txtAnswer",
-                    style: TextStyle(fontSize: 30,
+                    style: TextStyle(fontSize: 24,
                         color: Color(0xfffb5f66),
                         decoration: TextDecoration.underline)),
               ],
@@ -255,28 +269,50 @@ class _TestScreenState extends State<TestScreen> {
 
   Widget _titleText() {
     if (widget.series == SERIES.ALL) {
-      return Text("すべての問題", style: TextStyle(fontSize: 18));
+      return Text("すべての問題", style: TextStyle(fontSize: 20));
+    } else if (widget.series == SERIES.LEVEL1) {
+      return Text("初級", style: TextStyle(fontSize: 20));
+    } else if (widget.series == SERIES.LEVEL2) {
+      return Text("中級", style: TextStyle(fontSize: 20));
+    } else if (widget.series == SERIES.LEVEL3) {
+      return Text("上級", style: TextStyle(fontSize: 20));
+    } else if (widget.series == SERIES.LEVEL4) {
+      return Text("鬼", style: TextStyle(fontSize: 20));
     } else if (widget.series == SERIES.EASTBLUE) {
-      return Text("イーストブルー編", style: TextStyle(fontSize: 18));
+      return Text("イーストブルー編", style: TextStyle(fontSize: 20));
     } else if (widget.series == SERIES.ALABASTA) {
-      return Text("アラバスタ編", style: TextStyle(fontSize: 18));
+      return Text("アラバスタ編", style: TextStyle(fontSize: 20));
     } else if (widget.series == SERIES.SKYISLAND) {
-      return Text("ジャヤ,空島編", style: TextStyle(fontSize: 18));
+      return Text("ジャヤ,空島編", style: TextStyle(fontSize: 120));
     } else if (widget.series == SERIES.WATERSEVEN) {
-      return Text("ウォーターセブン,エニエスロビー編", style: TextStyle(fontSize: 18));
+      return Text("ウォーターセブン,エニエスロビー編", style: TextStyle(fontSize: 20));
     } else if (widget.series == SERIES.THRILLERBARK) {
-      return Text("スリラーバーク,シャボンディ諸島編", style: TextStyle(fontSize: 18));
+      return Text("スリラーバーク,シャボンディ諸島編", style: TextStyle(fontSize: 20));
     } else if (widget.series == SERIES.IMPELDOWN) {
-      return Text("インペルダウン,マリンフォード編", style: TextStyle(fontSize: 18));
+      return Text("インペルダウン,マリンフォード編", style: TextStyle(fontSize: 20));
     } else if (widget.series == SERIES.FISHMANISLAND) {
-      return Text("魚人島,パンクハザード編", style: TextStyle(fontSize: 18));
+      return Text("魚人島,パンクハザード編", style: TextStyle(fontSize: 20));
     } else if (widget.series == SERIES.DRESSROSA) {
-      return Text("ドレスローザ編", style: TextStyle(fontSize: 18));
+      return Text("ドレスローザ編", style: TextStyle(fontSize: 20));
     } else if (widget.series == SERIES.WHOLECAKEISLAND) {
-      return Text("ゾウ,ホールケーキアイランド編", style: TextStyle(fontSize: 18));
+      return Text("ゾウ,ホールケーキアイランド編", style: TextStyle(fontSize: 20));
     } else if (widget.series == SERIES.WANOKUNI) {
-      return Text("ワノ国編", style: TextStyle(fontSize: 18));
+      return Text("ワノ国編", style: TextStyle(fontSize: 20));
     }
-    return Text("麦わらクイズ", style: TextStyle(fontSize: 18));
+    return Text("麦わらクイズ", style: TextStyle(fontSize: 20));
+  }
+
+  Widget _questionLevelText() {
+    if(_currentWord.level == 1) {
+      return Text("レベル：初級", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, fontFamily: "Mont"));
+  } else if (_currentWord.level == 2) {
+      return Text("レベル：中級", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, fontFamily: "Mont"));
+    } else if (_currentWord.level == 3) {
+      return Text("レベル：上級", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, fontFamily: "Mont"));
+    }else if (_currentWord.level == 4) {
+      return Text("レベル：鬼", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, fontFamily: "Mont"));
+    } else {
+      return Text("");
+    }
   }
 }

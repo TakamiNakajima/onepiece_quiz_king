@@ -1,9 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:onepiece_quiz_king/data/series.dart';
 import 'package:onepiece_quiz_king/parts/button_with_icon.dart';
-import 'package:onepiece_quiz_king/screens/test_screen.dart';
-
-import '../const/dropdownitems.dart';
+import 'package:onepiece_quiz_king/views/screens/test_screen.dart';
+import '../../const/dropdownitemlist.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -13,7 +13,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isIncludedMemorizedWords = false;
   SERIES _selectedSeries = SERIES.ALL;
-
 
   @override
   Widget build(BuildContext context) {
@@ -70,15 +69,19 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _titleText() {
     return Column(
       children: [
-        Text("麦わらクイズ", style: TextStyle(fontSize: 48, color: Color(0xfffcb860))),
+        Text("麦わらクイズ",
+            style: TextStyle(fontSize: 48, color: Color(0xfffcb860))),
         SizedBox(height: 16),
-        Text("-Quiz of Mugiwara-", style: TextStyle(fontSize: 20, color: Color(0xfffcb860))),
+        Text("-Quiz of Mugiwara-",
+            style: TextStyle(fontSize: 20, color: Color(0xfffcb860))),
       ],
     );
   }
 
   _startTestScreen(BuildContext context) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => TestScreen(series: _selectedSeries)));
+        context,
+        MaterialPageRoute(
+            builder: (context) => TestScreen(series: _selectedSeries)));
   }
 }

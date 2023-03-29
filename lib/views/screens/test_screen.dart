@@ -1,7 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:onepiece_quiz_king/data/series.dart';
 import 'package:onepiece_quiz_king/db/database.dart';
 import 'package:onepiece_quiz_king/main.dart';
+import '../components/answer_card_part.dart';
+import '../components/end_message.dart';
+import '../components/number_of_question_part.dart';
+import '../components/question_card_part.dart';
+import '../components/testscreen_title_text.dart';
 
 enum TestStatus { BEFORE_START, SHOW_QUESTION, SHOW_ANSWER, FINISHED }
 
@@ -23,12 +29,18 @@ class _TestScreenState extends State<TestScreen> {
   bool isAnswerCardVisible = false;
   bool isCheckBoxVisible = false;
   bool isFabVisible = false;
+  // bool _isMemorized = false;
 
   List<Word> _testDataList = [];
   TestStatus _testStatus = TestStatus.BEFORE_START;
 
   int _index = 0; //いま何問目か
-  late Word _currentWord;
+  late Word _currentWord = Word(
+      strQuestion: "strQuestion",
+      strAnswer: "strAnswer",
+      isMemorized: false,
+      series: 1,
+      level: 1);
 
   @override
   void initState() {
@@ -38,151 +50,51 @@ class _TestScreenState extends State<TestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xffffffff),
-      appBar: AppBar(
-        title: _titleText(),
-        centerTitle: true,
-        backgroundColor: Color(0xfffcb860),
-      ),
-      floatingActionButton: (isFabVisible && _testDataList.isNotEmpty)
-          ? FloatingActionButton(
-              onPressed: () => _goNextStatus(),
-              child: Icon(Icons.skip_next),
-              tooltip: "次にすすむ",
-              backgroundColor: Color(0xfffcb860),
-            )
-          : null,
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              SizedBox(height: 20),
-              //のこり問題数表示部分
-              _numberOfQuestionPart(),
-              SizedBox(height: 20),
-              //問題カード表示部分
-              _questionCardPart(),
-              //こたえカード表示部分
-              _answerCardPart(),
-              SizedBox(height: 10),
-              //正解済みチェック部分
-              // _isMemorizedCheckPart(),
-            ],
-          ),
-          _endMessage(),
-        ],
+    return SafeArea(
+      child: CupertinoPageScaffold(
+        backgroundColor: Color(0xffffffff),
+        navigationBar: CupertinoNavigationBar(
+          middle: TextScreenTitleText(series: widget.series),
+          backgroundColor: Color(0xfffcb860),
+        ),
+        child: Stack(
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(height: 20),
+                //のこり問題数表示部分
+                NumberOfQuestionPart(numberOfQuestion: _numberOfQuestion),
+                SizedBox(height: 20),
+                //問題カード表示部分
+                QuestionCardPart(
+                  isQuestionCardVisible: isQuestionCardVisible,
+                  txtQuestion: _txtQuestion,
+                  level: _currentWord.level,
+                ),
+                //こたえカード表示部分
+                AnswerCardPart(
+                  isAnswerCardVisible: isAnswerCardVisible,
+                  txtAnswer: _txtAnswer,
+                ),
+                SizedBox(height: 40),
+                //正解済みチェック部分
+                // IsMeMorisedCheckPart(
+                //   isCheckBoxVisible: isCheckBoxVisible,
+                //   isMemorized: _isMemorized,
+                // ),
+              ],
+            ),
+            //次へボタン
+            Positioned(right: 30, bottom: 60, child: _goNextButton()),
+            //終了メッセージ
+            EndMessage(testStatus: _testStatus),
+          ],
+        ),
       ),
     );
   }
-
-  //のこり問題数表示部分
-  Widget _numberOfQuestionPart() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text("残り", style: TextStyle(fontSize: 16, fontFamily: "Mont")),
-        SizedBox(width: 8),
-        Text("${_numberOfQuestion.toString()}問",
-            style: TextStyle(
-                fontSize: 20, fontFamily: "Lanobe", fontWeight: FontWeight.w600)),
-      ],
-    );
-  }
-
-  //問題カード表示部分
-  Widget _questionCardPart() {
-    if (isQuestionCardVisible) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: Card(
-          elevation: 4,
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            width: double.infinity,
-            height: 250,
-            decoration: BoxDecoration(
-              border: Border.all(color: Color(0xfffcb860), width: 1.5),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: Text(_txtQuestion,
-                        textAlign: TextAlign.left,
-                        style:
-                            TextStyle(fontSize: 20, color: Colors.grey[800])),
-                  ),
-                  _questionLevelText(),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    } else {
-      return Container();
-    }
-  }
-
-  //こたえカード表示部分
-  Widget _answerCardPart() {
-    if (isAnswerCardVisible) {
-      return Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Card(
-          elevation: 4,
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              border: Border.all(color: Color(0xfffb5f66), width: 1.5),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "A. $_txtAnswer",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Color(0xfffb5f66),
-                    ),
-                  ),
-                ],
-              )),
-            ),
-          ),
-        ),
-      );
-    } else {
-      return Container();
-    }
-  }
-
-  //正解済みチェック部分
-  // Widget _isMemorizedCheckPart() {
-  //   if (isCheckBoxVisible) {
-  //     return Padding(
-  //       padding: const EdgeInsets.symmetric(horizontal: 30),
-  //       child: CheckboxListTile(
-  //           title: Text("正解したらチェックしてください"),
-  //           value: _isMemorized,
-  //           onChanged: (value) {
-  //             setState(() {
-  //               _isMemorized = value!;
-  //             });
-  //           }),
-  //     );
-  //   } else {
-  //     return Container();
-  //   }
-  // }
 
   _goNextStatus() async {
     switch (_testStatus) {
@@ -192,7 +104,7 @@ class _TestScreenState extends State<TestScreen> {
         break;
       case TestStatus.SHOW_QUESTION:
         _testStatus = TestStatus.SHOW_ANSWER;
-        _showAnswer();
+        _showAnswer(_currentWord);
         break;
       case TestStatus.SHOW_ANSWER:
         // await _updateMemorizedFlag();
@@ -224,7 +136,7 @@ class _TestScreenState extends State<TestScreen> {
     _index += 1;
   }
 
-  void _showAnswer() {
+  void _showAnswer(_currentWord) {
     setState(() {
       isQuestionCardVisible = true;
       isAnswerCardVisible = true;
@@ -233,73 +145,6 @@ class _TestScreenState extends State<TestScreen> {
     });
     _txtAnswer = _currentWord.strAnswer;
     // _isMemorized = _currentWord.isMemorized;
-  }
-
-  Widget _endMessage() {
-    if (TestStatus == TestStatus.FINISHED) {
-      return Center(
-          child: Text("クイズ終了",
-              style: TextStyle(fontSize: 60, color: Colors.grey[800])));
-    } else {
-      return Container();
-    }
-  }
-
-  Widget _titleText() {
-    if (widget.series == SERIES.ALL) {
-      return Text("すべての問題", style: TextStyle(fontSize: 16));
-    } else if (widget.series == SERIES.LEVEL1) {
-      return Text("初級", style: TextStyle(fontSize: 16));
-    } else if (widget.series == SERIES.LEVEL2) {
-      return Text("中級", style: TextStyle(fontSize: 16));
-    } else if (widget.series == SERIES.LEVEL3) {
-      return Text("上級", style: TextStyle(fontSize: 16));
-    } else if (widget.series == SERIES.LEVEL4) {
-      return Text("鬼", style: TextStyle(fontSize: 16));
-    } else if (widget.series == SERIES.EASTBLUE) {
-      return Text("イーストブルー編", style: TextStyle(fontSize: 16));
-    } else if (widget.series == SERIES.ALABASTA) {
-      return Text("アラバスタ編", style: TextStyle(fontSize: 16));
-    } else if (widget.series == SERIES.SKYISLAND) {
-      return Text("ジャヤ,空島編", style: TextStyle(fontSize: 16));
-    } else if (widget.series == SERIES.WATERSEVEN) {
-      return Text("ウォーターセブン,エニエスロビー編", style: TextStyle(fontSize: 16));
-    } else if (widget.series == SERIES.THRILLERBARK) {
-      return Text("スリラーバーク,シャボンディ諸島編", style: TextStyle(fontSize: 16));
-    } else if (widget.series == SERIES.IMPELDOWN) {
-      return Text("インペルダウン,マリンフォード編", style: TextStyle(fontSize: 16));
-    } else if (widget.series == SERIES.FISHMANISLAND) {
-      return Text("魚人島,パンクハザード編", style: TextStyle(fontSize: 16));
-    } else if (widget.series == SERIES.DRESSROSA) {
-      return Text("ドレスローザ編", style: TextStyle(fontSize: 16));
-    } else if (widget.series == SERIES.WHOLECAKEISLAND) {
-      return Text("ゾウ,ホールケーキアイランド編", style: TextStyle(fontSize: 16));
-    } else if (widget.series == SERIES.WANOKUNI) {
-      return Text("ワノ国編", style: TextStyle(fontSize: 16));
-    }
-    return Text("麦わらクイズ", style: TextStyle(fontSize: 16));
-  }
-
-  Widget _questionLevelText() {
-    if (_currentWord.level == 1) {
-      return Text("レベル：初級",
-          style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w400, fontFamily: "Mont"));
-    } else if (_currentWord.level == 2) {
-      return Text("レベル：中級",
-          style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w400, fontFamily: "Mont"));
-    } else if (_currentWord.level == 3) {
-      return Text("レベル：上級",
-          style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w400, fontFamily: "Mont"));
-    } else if (_currentWord.level == 4) {
-      return Text("レベル：鬼",
-          style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w400, fontFamily: "Mont"));
-    } else {
-      return Text("");
-    }
   }
 
   void _getTestData() async {
@@ -361,5 +206,15 @@ class _TestScreenState extends State<TestScreen> {
       isFabVisible = true;
       _numberOfQuestion = _testDataList.length;
     });
+  }
+
+  Widget _goNextButton() {
+    return (isFabVisible && _testDataList.isNotEmpty)
+        ? FloatingActionButton(
+            onPressed: _goNextStatus,
+            child: Icon(Icons.skip_next),
+            backgroundColor: Color(0xfffcb860),
+          )
+        : Container();
   }
 }

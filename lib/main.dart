@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:onepiece_quiz_king/db/database.dart';
 import 'package:onepiece_quiz_king/views/screens/home_screen.dart';
@@ -32,9 +33,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return CupertinoApp(
       title: "麦わらQ",
-      theme: ThemeData(brightness: Brightness.light, fontFamily: "Lanobe"),
+      theme: CupertinoThemeData(brightness: Brightness.light),
       home: HomeScreen(),
       debugShowCheckedModeBanner: false,
     );

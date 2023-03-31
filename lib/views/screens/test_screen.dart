@@ -29,6 +29,7 @@ class _TestScreenState extends State<TestScreen> {
   bool isAnswerCardVisible = false;
   bool isCheckBoxVisible = false;
   bool isFabVisible = false;
+
   // bool _isMemorized = false;
 
   List<Word> _testDataList = [];
@@ -55,6 +56,12 @@ class _TestScreenState extends State<TestScreen> {
         backgroundColor: Color(0xffffffff),
         navigationBar: CupertinoNavigationBar(
           middle: TextScreenTitleText(series: widget.series),
+          leading: GestureDetector(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          ),
           backgroundColor: Color(0xfffcb860),
         ),
         child: Stack(

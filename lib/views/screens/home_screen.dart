@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:onepiece_quiz_king/data/series.dart';
-import 'package:onepiece_quiz_king/parts/button_with_icon.dart';
 import 'package:onepiece_quiz_king/views/screens/test_screen.dart';
 import '../../const/dropdownitemlist.dart';
 import '../components/selected_series_text.dart';
@@ -32,35 +31,49 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            CupertinoButton(
-              disabledColor: Colors.white,
-              child: SelectedSeriesText(selectedSeries: _selectedSeries),
-              onPressed: () => showCupertinoModalPopup(
-                context: context,
-                builder: (_) => SizedBox(
-                  width: double.infinity,
-                  height: 250,
-                  child: CupertinoPicker(
-                    backgroundColor: Colors.white,
-                    itemExtent: 40,
-                    scrollController: FixedExtentScrollController(
-                      initialItem: 1,
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              elevation: 4,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: CupertinoButton(
+                  disabledColor: Colors.white,
+                  child: SelectedSeriesText(selectedSeries: _selectedSeries),
+                  onPressed: () => showCupertinoModalPopup(
+                    context: context,
+                    builder: (_) => SizedBox(
+                      width: double.infinity,
+                      height: 250,
+                      child: CupertinoPicker(
+                        backgroundColor: Colors.white,
+                        itemExtent: 40,
+                        scrollController: FixedExtentScrollController(
+                          initialItem: 1,
+                        ),
+                        children: DropDownItemList,
+                        onSelectedItemChanged: (int value) {
+                          if (DropDownItemList[value].value != null) {
+                            setState(() {
+                              _selectedSeries = DropDownItemList[value].value;
+                            });
+                          }
+                          ;
+                        },
+                      ),
                     ),
-                    children: DropDownItemList,
-                    onSelectedItemChanged: (int value) {
-                      if (DropDownItemList[value].value != null) {
-                        setState(() {
-                          _selectedSeries = DropDownItemList[value].value;
-                        });
-                      }
-                      ;
-                    },
                   ),
                 ),
               ),
             ),
             //スタートボタン
-            ButtonWithIcon(
+            SizedBox(
+              width: 300,
+              height: 56,
+              child: ElevatedButton.icon(
                 onPressed: () {
                   Navigator.push(
                       context,
@@ -68,12 +81,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: (context) =>
                               TestScreen(series: _selectedSeries)));
                 },
-                icon: Icon(CupertinoIcons.play_arrow),
-                label: "スタート",
-                color: Color(0xfffcb860)),
-            //コピーライト
-            Text("powered by Takami Nakajima 2023",
-                style: TextStyle(fontSize: 14, fontFamily: "Mont")),
+                icon: Icon(CupertinoIcons.play_fill),
+                label: Text("スタート", style: TextStyle(fontSize: 18)),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40)),
+                  backgroundColor: Color(0xfffcb860),
+                ),
+              ),
+            ),
           ],
         ),
       ),

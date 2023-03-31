@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
-      title: "麦わらQ",
+      title: "麦わらクイズ",
       theme: CupertinoThemeData(brightness: Brightness.light),
       home: HomeScreen(),
       debugShowCheckedModeBanner: false,

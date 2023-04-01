@@ -1,20 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AnswerCardPart extends StatefulWidget {
-  bool isAnswerCardVisible;
-  String txtAnswer;
+class AnswerCardPart extends StatelessWidget {
+  late bool isAnswerCardVisible;
+  late String txtAnswer;
 
   AnswerCardPart({required this.isAnswerCardVisible, required this.txtAnswer});
 
   @override
-  State<AnswerCardPart> createState() => _AnswerCardPartState();
-}
-
-class _AnswerCardPartState extends State<AnswerCardPart> {
-  @override
   Widget build(BuildContext context) {
-    if (widget.isAnswerCardVisible) {
+    if (isAnswerCardVisible) {
       return Padding(
         padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 16),
         child: Card(
@@ -32,7 +26,7 @@ class _AnswerCardPartState extends State<AnswerCardPart> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "A. ${widget.txtAnswer}",
+                    "A. $txtAnswer",
                     style: TextStyle(
                       fontSize: 18,
                       fontFamily: "Lanobe",

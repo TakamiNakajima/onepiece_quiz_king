@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class IsMeMorisedCheckPart extends StatefulWidget {
-  bool isCheckBoxVisible;
-  bool isMemorized;
+  late bool isCheckBoxVisible;
+  late bool isMemorized;
 
   IsMeMorisedCheckPart(
       {required this.isCheckBoxVisible, required this.isMemorized});

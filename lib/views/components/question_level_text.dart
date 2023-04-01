@@ -1,35 +1,28 @@
 import 'package:flutter/cupertino.dart';
 
-class QuestionLevelText extends StatefulWidget {
-  var level;
+class QuestionLevelText extends StatelessWidget {
+  late int level;
 
   QuestionLevelText({required this.level});
 
   @override
-  State<QuestionLevelText> createState() => _QuestionLevelTextState();
-}
-
-class _QuestionLevelTextState extends State<QuestionLevelText> {
-  @override
   Widget build(BuildContext context) {
-    if (widget.level == 1) {
-      return Text("レベル：初級",
-          style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w400, fontFamily: "Mont"));
-    } else if (widget.level == 2) {
-      return Text("レベル：中級",
-          style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w400, fontFamily: "Mont"));
-    } else if (widget.level == 3) {
-      return Text("レベル：上級",
-          style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w400, fontFamily: "Mont"));
-    } else if (widget.level == 4) {
-      return Text("レベル：鬼",
-          style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w400, fontFamily: "Mont"));
+    if (level == 1) {
+      return _testLevelText("レベル：初級");
+    } else if (level == 2) {
+      return _testLevelText("レベル：中級");
+    } else if (level == 3) {
+      return _testLevelText("レベル：上級");
+    } else if (level == 4) {
+      return _testLevelText("レベル：鬼");
     } else {
       return Text("");
     }
+  }
+
+  Widget _testLevelText(text) {
+    return Text(text,
+        style: TextStyle(
+            fontSize: 14, fontWeight: FontWeight.w400, fontFamily: "Mont"));
   }
 }

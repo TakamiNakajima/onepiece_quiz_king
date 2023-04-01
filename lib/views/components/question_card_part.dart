@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:onepiece_quiz_king/views/components/question_level_text.dart';
 
-class QuestionCardPart extends StatefulWidget {
-  bool isQuestionCardVisible;
-  String txtQuestion;
-  var level;
+class QuestionCardPart extends StatelessWidget {
+  late bool isQuestionCardVisible;
+  late String txtQuestion;
+  late int level;
 
   QuestionCardPart(
       {required this.isQuestionCardVisible,
@@ -13,13 +12,8 @@ class QuestionCardPart extends StatefulWidget {
       required this.level});
 
   @override
-  State<QuestionCardPart> createState() => _QuestionCardPartState();
-}
-
-class _QuestionCardPartState extends State<QuestionCardPart> {
-  @override
   Widget build(BuildContext context) {
-    if (widget.isQuestionCardVisible) {
+    if (isQuestionCardVisible) {
       return Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: Card(
@@ -38,7 +32,7 @@ class _QuestionCardPartState extends State<QuestionCardPart> {
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    child: Text(widget.txtQuestion,
+                    child: Text(txtQuestion,
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 18,
@@ -46,7 +40,7 @@ class _QuestionCardPartState extends State<QuestionCardPart> {
                           fontFamily: "Lanobe",
                         )),
                   ),
-                  QuestionLevelText(level: widget.level),
+                  QuestionLevelText(level: level),
                 ],
               ),
             ),

@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class GoNextButton extends StatefulWidget {
-  bool isFabVisible;
-  List testDataList;
-  VoidCallback onPressed;
+class GoNextButton extends StatelessWidget {
+  late bool isFabVisible;
+  late List testDataList;
+  late VoidCallback onPressed;
 
   GoNextButton({
     required this.isFabVisible,
@@ -13,15 +12,10 @@ class GoNextButton extends StatefulWidget {
   });
 
   @override
-  State<GoNextButton> createState() => _GoNextButtonState();
-}
-
-class _GoNextButtonState extends State<GoNextButton> {
-  @override
   Widget build(BuildContext context) {
-    return (widget.isFabVisible && widget.testDataList.isNotEmpty)
+    return (isFabVisible && testDataList.isNotEmpty)
         ? TextButton(
-            onPressed: widget.onPressed,
+            onPressed: onPressed,
             child: Text("次へ", style: (TextStyle(fontSize: 16))),
           )
         : Container();

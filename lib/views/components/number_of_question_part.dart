@@ -1,25 +1,21 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class NumberOfQuestionPart extends StatefulWidget {
-  var numberOfQuestion;
+class NumberOfQuestionPart extends StatelessWidget {
+  late int numberOfQuestion;
 
   NumberOfQuestionPart({required this.numberOfQuestion});
 
-  @override
-  State<NumberOfQuestionPart> createState() => _NumberOfQuestionPartState();
-}
-
-class _NumberOfQuestionPartState extends State<NumberOfQuestionPart> {
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("残り", style: TextStyle(fontSize: 16, fontFamily: "Mont")),
+        Text("残り", style: TextStyle(fontSize: 16, fontFamily: "Mont", color: Colors.black)),
         SizedBox(width: 8),
-        Text("${widget.numberOfQuestion.toString()}問",
+        Text("${numberOfQuestion.toString()}問",
             style: TextStyle(
-                fontSize: 20, fontFamily: "Lanobe", fontWeight: FontWeight.w600)),
+                fontSize: 20, fontFamily: "Lanobe", fontWeight: FontWeight.w600, color: Colors.black)),
       ],
     );
   }

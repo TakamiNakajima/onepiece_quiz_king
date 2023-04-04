@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:onepiece_quiz_king/const/dropdownitemlist.dart';
 import 'package:onepiece_quiz_king/models/data/series.dart';
+import 'package:onepiece_quiz_king/views/components/texts/selected_series_text.dart';
+import 'package:onepiece_quiz_king/views/components/texts/title_text.dart';
 import 'package:onepiece_quiz_king/views/screens/test_screen.dart';
-import '../../const/dropdownitemlist.dart';
-import '../components/selected_series_text.dart';
-import '../components/title_text.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -21,7 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: SafeArea(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 40, bottom: 40, left: 10, right: 10),
+            padding:
+                const EdgeInsets.only(top: 40, bottom: 40, left: 10, right: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               mainAxisSize: MainAxisSize.max,
@@ -29,7 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   child: Column(
                     children: [
-                      Image.asset("assets/images/hat2.png",
+                      Image.asset(
+                        "assets/images/hat2.png",
                         width: 240,
                       ),
                       SizedBox(height: 20),
@@ -37,62 +39,105 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  elevation: 4,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: CupertinoButton(
-                      disabledColor: Colors.white,
-                      child: SelectedSeriesText(selectedSeries: _selectedSeries),
-                      onPressed: () => showCupertinoModalPopup(
-                        context: context,
-                        builder: (_) => SizedBox(
-                          width: double.infinity,
-                          height: 300,
-                          child: CupertinoPicker(
-                            backgroundColor: Colors.white,
-                            itemExtent: 40,
-                            scrollController: FixedExtentScrollController(
-                              initialItem: 1,
-                            ),
-                            children: DropDownItemList,
-                            onSelectedItemChanged: (int value) {
-                              if (DropDownItemList[value].value != null) {
-                                setState(() {
-                                  _selectedSeries = DropDownItemList[value].value;
-                                });
-                              }
-                              ;
-                            },
+                Material(
+                  child: InkWell(
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32),
+                      ),
+                      elevation: 0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(32),
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(0xfffb5f66),
+                              Colors.orangeAccent,
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white38,
+                              spreadRadius: 0,
+                              blurRadius: 2,
+                              offset: Offset(2, 2),
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: SelectedSeriesText(
+                              selectedSeries: _selectedSeries),
+                        ),
+                      ),
+                    ),
+                    onTap: () => showCupertinoModalPopup(
+                      context: context,
+                      builder: (_) => SizedBox(
+                        width: double.infinity,
+                        height: 300,
+                        child: CupertinoPicker(
+                          backgroundColor: Colors.white,
+                          itemExtent: 40,
+                          scrollController: FixedExtentScrollController(
+                            initialItem: 1,
+                          ),
+                          children: DropDownItemList,
+                          onSelectedItemChanged: (int value) {
+                            if (DropDownItemList[value].value != null) {
+                              setState(() {
+                                _selectedSeries = DropDownItemList[value].value;
+                              });
+                            }
+                            ;
+                          },
                         ),
                       ),
                     ),
                   ),
                 ),
                 //スタートボタン
-                SizedBox(
-                  width: 160,
-                  height: 48,
-                  child: ElevatedButton.icon(
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        Color(0xfffb5f66),
+                        Colors.orangeAccent,
+                        //add more colors
+                      ]),
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, 0),
+                            //shadow for button
+                            blurRadius: 5) //blur radius of shadow
+                      ]),
+                  child: TextButton(
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) =>
-                                  TestScreen(series: _selectedSeries)));
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) =>
+                              TestScreen(series: _selectedSeries),
+                        ),
+                      );
                     },
-                    icon: Icon(CupertinoIcons.play_fill),
-                    label: Text("スタート", style: TextStyle(fontSize: 18)),
                     style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40)),
-                      backgroundColor: Color(0xfffcb860),
+                      backgroundColor: Colors.transparent,
+                      disabledForegroundColor:
+                          Colors.transparent.withOpacity(0),
+                      disabledBackgroundColor:
+                          Colors.transparent.withOpacity(0),
+                      shadowColor: Colors.transparent,
+                      //make color or elevated button transparent
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        "はじめる",
+                        style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),

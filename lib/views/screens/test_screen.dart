@@ -7,7 +7,7 @@ import '../components/answer_card_part.dart';
 import '../components/end_message.dart';
 import '../components/number_of_question_part.dart';
 import '../components/question_card_part.dart';
-import '../components/testscreen_title_text.dart';
+import '../components/texts/testscreen_title_text.dart';
 
 enum TestStatus { BEFORE_START, SHOW_QUESTION, SHOW_ANSWER, FINISHED }
 

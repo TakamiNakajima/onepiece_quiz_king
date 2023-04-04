@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onepiece_quiz_king/views/components/question_level_text.dart';
+import 'package:onepiece_quiz_king/views/components/texts/question_level_text.dart';
 
 class QuestionCardPart extends StatelessWidget {
   late bool isQuestionCardVisible;

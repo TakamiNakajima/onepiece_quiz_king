@@ -1,4 +1,4 @@
-import '../../models/data/series.dart';
+import '../../../models/data/series.dart';
 import 'home_selected_q_text.dart';
 
 SelectedSeriesText({required SERIES selectedSeries}) {

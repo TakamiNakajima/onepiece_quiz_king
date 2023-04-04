@@ -13,7 +13,7 @@ class SelectedQText extends StatelessWidget {
         fontSize: 18,
         fontWeight: FontWeight.bold,
         fontFamily: "Lanobe",
-        color: Color(0xfffb5f66),
+        color: Colors.white,
       ),
     );
   }

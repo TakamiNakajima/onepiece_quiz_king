@@ -7,8 +7,21 @@ class TitleText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text("麦わらクイズ",
-            style: TextStyle(fontSize: 48, color: Color(0xfffcb860), fontFamily: "Lanobe")),
+        ShaderMask(
+          child: Text(
+            "麦わらクイズ",
+            style: TextStyle(
+                fontSize: 56, color: Colors.white, fontFamily: "Lanobe"),
+          ),
+          shaderCallback: (Rect rect) {
+            return LinearGradient(
+              colors: [
+                Color(0xFFFDC178),
+                Color(0xfffcb860),
+              ],
+            ).createShader(rect);
+          },
+        ),
       ],
     );
   }

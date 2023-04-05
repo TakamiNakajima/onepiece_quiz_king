@@ -22,9 +22,9 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Center(
           child: Padding(
             padding:
-                const EdgeInsets.only(top: 40, bottom: 40, left: 10, right: 10),
+                const EdgeInsets.only(top: 40, bottom: 40, left: 20, right: 20),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
               children: [
                 Container(
@@ -32,47 +32,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Image.asset(
                         "assets/images/hat2.png",
-                        width: 240,
+                        width: 280,
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 40),
                       const TitleText(),
                     ],
                   ),
                 ),
                 Material(
                   child: InkWell(
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32),
-                      ),
-                      elevation: 0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(32),
-                          gradient: LinearGradient(
-                            colors: [
-                              Color(0xfffb5f66),
-                              Colors.orangeAccent,
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.white38,
-                              spreadRadius: 0,
-                              blurRadius: 2,
-                              offset: Offset(2, 2),
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(16),
-                          child: SelectedSeriesText(
-                              selectedSeries: _selectedSeries),
-                        ),
-                      ),
-                    ),
+                    child: SelectedSeriesText(selectedSeries: _selectedSeries),
                     onTap: () => showCupertinoModalPopup(
                       context: context,
                       builder: (_) => SizedBox(
@@ -87,11 +56,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: DropDownItemList,
                           onSelectedItemChanged: (int value) {
                             if (DropDownItemList[value].value != null) {
-                              setState(() {
-                                _selectedSeries = DropDownItemList[value].value;
-                              });
+                              setState(
+                                () {
+                                  _selectedSeries =
+                                      DropDownItemList[value].value;
+                                },
+                              );
                             }
-                            ;
                           },
                         ),
                       ),
@@ -99,44 +70,54 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 //スタートボタン
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                        Color(0xfffb5f66),
-                        Colors.orangeAccent,
-                        //add more colors
-                      ]),
-                      borderRadius: BorderRadius.circular(5),
+                SizedBox(
+                  width: double.infinity,
+                  height: 60,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xFFFDC178),
+                          Color(0xfffcb860),
+                          //add more colors
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(40),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
                             color: Color.fromRGBO(0, 0, 0, 0),
                             //shadow for button
                             blurRadius: 5) //blur radius of shadow
-                      ]),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) =>
-                              TestScreen(series: _selectedSeries),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      disabledForegroundColor:
-                          Colors.transparent.withOpacity(0),
-                      disabledBackgroundColor:
-                          Colors.transparent.withOpacity(0),
-                      shadowColor: Colors.transparent,
-                      //make color or elevated button transparent
+                      ],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        "はじめる",
-                        style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) =>
+                                TestScreen(series: _selectedSeries),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        disabledForegroundColor:
+                            Colors.transparent.withOpacity(0),
+                        disabledBackgroundColor:
+                            Colors.transparent.withOpacity(0),
+                        shadowColor: Colors.transparent,
+                        //make color or elevated button transparent
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          "はじめる",
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),

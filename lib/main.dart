@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:onepiece_quiz_king/db/database.dart';
 import 'package:onepiece_quiz_king/views/screens/home_screen.dart';
 import 'package:path/path.dart';
@@ -11,9 +11,10 @@ late MyDatabase database;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   var dbPath = await getDbPath();
   database = MyDatabase(dbPath: dbPath);
-  runApp(ProviderScope(child: MyApp()));
+  runApp(MyApp());
 }
 
 Future<String> getDbPath() async {
@@ -28,14 +29,14 @@ Future<String> getDbPath() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
       title: "麦わらクイズ",
       theme: CupertinoThemeData(
-        textTheme: CupertinoTextThemeData(textStyle: TextStyle(fontSize: 18)),
+        textTheme: CupertinoTextThemeData(textStyle: TextStyle(fontSize: 18),
+        ),
       ),
       home: HomeScreen(),
       debugShowCheckedModeBanner: false,

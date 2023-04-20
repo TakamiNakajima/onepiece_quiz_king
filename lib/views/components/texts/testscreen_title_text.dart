@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onepiece_quiz_king/const/const.dart';
 import 'package:onepiece_quiz_king/models/data/series.dart';
 
 class TestScreenTitleText extends StatelessWidget {
@@ -43,6 +44,6 @@ class TestScreenTitleText extends StatelessWidget {
   }
 
   Widget testTitleText(String text) {
-    return Text(text, style: TextStyle(fontSize: 18, color: Colors.white));
+    return Text(text, style: lanobeMediumTextStyle);
   }
 }

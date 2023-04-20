@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:onepiece_quiz_king/const/const.dart';
 
 class NumberOfQuestionPart extends StatelessWidget {
   late int numberOfQuestion;
@@ -11,11 +12,10 @@ class NumberOfQuestionPart extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("残り", style: TextStyle(fontSize: 16, fontFamily: "Mont", color: Colors.black)),
+        Text("残り", style: montNumberOfQSmallTextStyle),
         SizedBox(width: 8),
         Text("${numberOfQuestion.toString()}問",
-            style: TextStyle(
-                fontSize: 20, fontFamily: "Lanobe", fontWeight: FontWeight.w600, color: Colors.black)),
+            style: lanobeNumberOfQLargeTextStyle),
       ],
     );
   }

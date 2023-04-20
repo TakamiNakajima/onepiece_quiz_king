@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:onepiece_quiz_king/const/const.dart';
 
 class QuestionLevelText extends StatelessWidget {
   late int level;
@@ -21,8 +22,6 @@ class QuestionLevelText extends StatelessWidget {
   }
 
   Widget _testLevelText(text) {
-    return Text(text,
-        style: TextStyle(
-            fontSize: 14, fontWeight: FontWeight.w400, fontFamily: "Mont"));
+    return Text(text, style: montSmallTextStyle);
   }
 }

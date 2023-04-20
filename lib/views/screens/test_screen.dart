@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:onepiece_quiz_king/models/data/series.dart';
 import 'package:onepiece_quiz_king/db/database.dart';
 import 'package:onepiece_quiz_king/main.dart';
+import 'package:onepiece_quiz_king/models/manager/ad_manager.dart';
 import '../components/answer_card_part.dart';
 import '../components/end_message.dart';
 import '../components/number_of_question_part.dart';
@@ -33,6 +35,8 @@ class _TestScreenState extends State<TestScreen> {
   List<Word> _testDataList = [];
   TestStatus _testStatus = TestStatus.BEFORE_START;
 
+  BannerAd? bannerAd;
+
   int _index = 0; //いま何問目か
   late Word _currentWord = Word(
       strQuestion: "strQuestion",
@@ -45,51 +49,67 @@ class _TestScreenState extends State<TestScreen> {
   void initState() {
     super.initState();
     _getTestData();
+    bannerAd = BannerAd(
+      size: AdSize.banner,
+      adUnitId: AdManager.bannerAdUnitId,
+      listener: BannerAdListener(),
+      request: AdRequest(),
+    );
+    _loadBannerAd();
+  }
+
+  @override
+  void dispose() {
+    bannerAd?.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: Color(0xffffffff),
       navigationBar: CupertinoNavigationBar(
         middle: TestScreenTitleText(series: widget.series),
         leading: GestureDetector(
-          onTap: (){
+          onTap: () {
             Navigator.pop(context);
           },
           child: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
         ),
         backgroundColor: Color(0xfffcb860),
       ),
-      child: Stack(
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(height: 20),
-              //のこり問題数表示部分
-              NumberOfQuestionPart(numberOfQuestion: _numberOfQuestion),
-              SizedBox(height: 20),
-              //問題カード表示部分
-              QuestionCardPart(
-                isQuestionCardVisible: isQuestionCardVisible,
-                txtQuestion: _txtQuestion,
-                level: _currentWord.level,
-              ),
-              //こたえカード表示部分
-              AnswerCardPart(
-                isAnswerCardVisible: isAnswerCardVisible,
-                txtAnswer: _txtAnswer,
-              ),
-              SizedBox(height: 40),
-            ],
-          ),
-          //次へボタン
-          Positioned(right: 30, bottom: 60, child: _goNextButton()),
-          //終了メッセージ
-          EndMessage(testStatus: _testStatus),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10, bottom: 20),
+        child: Stack(
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(height: 20),
+                //のこり問題数表示部分
+                NumberOfQuestionPart(numberOfQuestion: _numberOfQuestion),
+                SizedBox(height: 20),
+                //問題カード表示部分
+                QuestionCardPart(
+                  isQuestionCardVisible: isQuestionCardVisible,
+                  txtQuestion: _txtQuestion,
+                  level: _currentWord.level,
+                ),
+                //こたえカード表示部分
+                AnswerCardPart(
+                  isAnswerCardVisible: isAnswerCardVisible,
+                  txtAnswer: _txtAnswer,
+                ),
+                SizedBox(height: 40),
+              ],
+            ),
+            //次へボタン
+            Positioned(right: 30, bottom: 60, child: _goNextButton()),
+            //終了メッセージ
+            EndMessage(testStatus: _testStatus),
+            adPart(bannerAd),
+          ],
+        ),
       ),
     );
   }
@@ -214,5 +234,24 @@ class _TestScreenState extends State<TestScreen> {
             backgroundColor: Color(0xfffcb860),
           )
         : Container();
+  }
+
+  void _loadBannerAd() {
+    bannerAd?.load();
+  }
+
+  Widget adPart(bannerAd) {
+    return Positioned(
+      left: 20,
+      right: 20,
+      bottom: 8,
+      child: (bannerAd == null)
+          ? Container(width: 0, height: 0)
+          : Container(
+              width: bannerAd?.size.width.toDouble(),
+              height: bannerAd?.size.height.toDouble(),
+              child: AdWidget(ad: bannerAd),
+            ),
+    );
   }
 }

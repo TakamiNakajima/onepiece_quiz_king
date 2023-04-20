@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onepiece_quiz_king/const/const.dart';
 import 'package:onepiece_quiz_king/views/components/texts/question_level_text.dart';
 
 class QuestionCardPart extends StatelessWidget {
@@ -34,11 +35,7 @@ class QuestionCardPart extends StatelessWidget {
                     width: double.infinity,
                     child: Text(txtQuestion,
                         textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black87,
-                          fontFamily: "Lanobe",
-                        )),
+                        style: lanobeQuestionTextStyle),
                   ),
                   QuestionLevelText(level: level),
                 ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onepiece_quiz_king/const/const.dart';
 
 class SelectedQText extends StatelessWidget {
   late String text;
@@ -7,24 +8,30 @@ class SelectedQText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ShaderMask(
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          fontFamily: "Lanobe",
-          color: Colors.white,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: subColor,
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 8,
+            offset: Offset(-6, -6),
+            color: Colors.white,
+          ),
+          BoxShadow(
+            blurRadius: 8,
+            offset: Offset(6, 6),
+            color: Color(0xffa7a9af),
+          ),
+        ]
+      ),
+      child: SizedBox(
+        width: 300,
+        height: 40,
+        child: Center(
+          child: Text(text, style: montMediumTextStyle),
         ),
       ),
-      shaderCallback: (Rect rect) {
-        return LinearGradient(
-          colors: [
-            Color(0xffff757c),
-            Color(0xfffb5f66),
-          ],
-        ).createShader(rect);
-      },
     );
   }
 }

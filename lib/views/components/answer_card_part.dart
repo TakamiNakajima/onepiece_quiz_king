@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onepiece_quiz_king/const/const.dart';
 
 class AnswerCardPart extends StatelessWidget {
   late bool isAnswerCardVisible;
@@ -27,11 +28,7 @@ class AnswerCardPart extends StatelessWidget {
                 children: [
                   Text(
                     "A. $txtAnswer",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: "Lanobe",
-                      color: Color(0xfffb5f66),
-                    ),
+                    style: lanobeAnswerTextStyle,
                   ),
                 ],
               )),

@@ -17,22 +17,29 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isIncludedMemorizedWords = false;
   SERIES _selectedSeries = SERIES.ALL;
   BannerAd? bannerAd;
+  InterstitialAd? interstitialAd;
+
+  int _numInterstitialLoadAttempt = 0;
 
   @override
   void initState() {
     super.initState();
-    bannerAd = BannerAd(
-      size: AdSize.banner,
-      adUnitId: AdManager.bannerAdUnitId,
-      listener: BannerAdListener(),
-      request: AdRequest(),
-    );
     _loadBannerAd();
+    _initBannerAd();
+    _initInterstitialAd();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    bannerAd?.dispose();
+    interstitialAd?.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: Color(0xfff2d6a2),
       child: SafeArea(
         child: Center(
           child: Stack(
@@ -48,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         children: [
                           Image.asset(
-                            "assets/images/hat2.png",
+                            "assets/images/image_hat.png",
                             width: 280,
                           ),
                           SizedBox(height: 40),
@@ -56,70 +63,53 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    Material(
-                      child: InkWell(
-                        child:
-                            SelectedSeriesText(selectedSeries: _selectedSeries),
-                        onTap: () => showCupertinoModalPopup(
-                          context: context,
-                          builder: (_) => SizedBox(
-                            width: double.infinity,
-                            height: 300,
-                            child: CupertinoPicker(
-                              backgroundColor: backgroundColor,
-                              itemExtent: 40,
-                              scrollController: FixedExtentScrollController(
-                                initialItem: 1,
-                              ),
-                              children: DropDownItemList,
-                              onSelectedItemChanged: (int value) {
-                                if (DropDownItemList[value].value != null) {
-                                  setState(() {
-                                      _selectedSeries = DropDownItemList[value].value;
-                                    },
-                                  );
-                                }
-                              },
+                    TextButton(
+                      onPressed: () => showCupertinoModalPopup(
+                        context: context,
+                        builder: (_) => SizedBox(
+                          width: double.infinity,
+                          height: 300,
+                          child: CupertinoPicker(
+                            backgroundColor: Colors.white,
+                            itemExtent: 40,
+                            scrollController: FixedExtentScrollController(
+                              initialItem: 1,
                             ),
+                            children: DropDownItemList,
+                            onSelectedItemChanged: (int value) {
+                              if (DropDownItemList[value].value != null) {
+                                setState(
+                                  () {
+                                    _selectedSeries =
+                                        DropDownItemList[value].value;
+                                  },
+                                );
+                              }
+                            },
                           ),
                         ),
                       ),
+                      child:
+                          SelectedSeriesText(selectedSeries: _selectedSeries),
                     ),
                     //スタートボタン
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: backgroundColor,
-                          boxShadow: const [
-                            BoxShadow(
-                              blurRadius: 8,
-                              offset: Offset(-6, -6),
-                              color: Colors.white,
+                    SizedBox(
+                      width: 280,
+                      height: 54,
+                      child: TextButton(
+                        onPressed: () {
+                          _loadInterstitialAd();
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) =>
+                                  TestScreen(series: _selectedSeries),
                             ),
-                            BoxShadow(
-                              blurRadius: 8,
-                              offset: Offset(6, 6),
-                              color: Color(0xffa7a9af),
-                            ),
-                          ]
-                      ),
-                      child: SizedBox(
-                        width: 300,
-                        height: 60,
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) =>
-                                    TestScreen(series: _selectedSeries),
-                              ),
-                            );
-                          },
-                          child: Text("はじめる", style: lanobeMediumTextStyle),
-                          style: TextButton.styleFrom(
-                            backgroundColor: mainColor,
-                          ),
+                          );
+                        },
+                        child: Text("はじめる", style: lanobeMediumTextStyle),
+                        style: TextButton.styleFrom(
+                          backgroundColor: mainColor,
                         ),
                       ),
                     ),
@@ -134,8 +124,26 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _loadBannerAd() {
+  void _initBannerAd() {
     bannerAd?.load();
+  }
+
+  void _initInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdManager.interstitialAdUnitId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          interstitialAd = ad;
+          _numInterstitialLoadAttempt = 0;
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          interstitialAd = null;
+          _numInterstitialLoadAttempt++;
+          if (_numInterstitialLoadAttempt <= 3) _initInterstitialAd();
+        },
+      ),
+    );
   }
 
   adPart(BannerAd? bannerAd) {
@@ -146,10 +154,33 @@ class _HomeScreenState extends State<HomeScreen> {
       child: (bannerAd == null)
           ? Container(width: 0, height: 0)
           : Container(
-              width: bannerAd?.size.width.toDouble(),
-              height: bannerAd?.size.height.toDouble(),
+              width: bannerAd.size.width.toDouble(),
+              height: bannerAd.size.height.toDouble(),
               child: AdWidget(ad: bannerAd),
             ),
     );
+  }
+
+  void _loadBannerAd() {
+    bannerAd = BannerAd(
+      size: AdSize.banner,
+      adUnitId: AdManager.bannerAdUnitId,
+      listener: BannerAdListener(),
+      request: AdRequest(),
+    );
+  }
+
+  void _loadInterstitialAd() {
+    if (interstitialAd == null) return;
+    interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (InterstitialAd ad) {
+      ad.dispose();
+      _initInterstitialAd();
+    }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+      ad.dispose();
+      _initInterstitialAd();
+    });
+    interstitialAd!.show();
+    interstitialAd = null;
   }
 }

@@ -36,6 +36,10 @@ class _TestScreenState extends State<TestScreen> {
   TestStatus _testStatus = TestStatus.BEFORE_START;
 
   BannerAd? bannerAd;
+  InterstitialAd? interstitialAd;
+
+  int _numInterstitialLoadAttempt = 0;
+  int adCount = 0;
 
   int _index = 0; //いま何問目か
   late Word _currentWord = Word(
@@ -56,17 +60,21 @@ class _TestScreenState extends State<TestScreen> {
       request: AdRequest(),
     );
     _loadBannerAd();
+    _initInterstitialAd();
+    adCount = 2;
   }
 
   @override
   void dispose() {
-    bannerAd?.dispose();
     super.dispose();
+    bannerAd?.dispose();
+    interstitialAd?.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: Color(0xffF2D6A2),
       navigationBar: CupertinoNavigationBar(
         middle: TestScreenTitleText(series: widget.series),
         leading: GestureDetector(
@@ -75,10 +83,10 @@ class _TestScreenState extends State<TestScreen> {
           },
           child: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
         ),
-        backgroundColor: Color(0xfffcb860),
+        backgroundColor: Color(0xff733917),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 20),
+        padding: const EdgeInsets.only(top: 20, bottom: 20),
         child: Stack(
           children: [
             Column(
@@ -104,7 +112,7 @@ class _TestScreenState extends State<TestScreen> {
               ],
             ),
             //次へボタン
-            Positioned(right: 30, bottom: 60, child: _goNextButton()),
+            Positioned(right: 30, bottom: 70, child: _goNextButton()),
             //終了メッセージ
             EndMessage(testStatus: _testStatus),
             adPart(bannerAd),
@@ -122,6 +130,11 @@ class _TestScreenState extends State<TestScreen> {
         break;
       case TestStatus.SHOW_QUESTION:
         _testStatus = TestStatus.SHOW_ANSWER;
+        adCount--;
+        if(adCount <= 0){
+          _loadInterstitialAd();
+          adCount = 2;
+        }
         _showAnswer(_currentWord);
         break;
       case TestStatus.SHOW_ANSWER:
@@ -231,7 +244,7 @@ class _TestScreenState extends State<TestScreen> {
         ? FloatingActionButton(
             onPressed: _goNextStatus,
             child: Icon(Icons.skip_next),
-            backgroundColor: Color(0xfffcb860),
+            backgroundColor: Color(0xff733917),
           )
         : Container();
   }
@@ -253,5 +266,37 @@ class _TestScreenState extends State<TestScreen> {
               child: AdWidget(ad: bannerAd),
             ),
     );
+  }
+
+  void _initInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdManager.interstitialAdUnitId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          interstitialAd = ad;
+          _numInterstitialLoadAttempt = 0;
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          interstitialAd = null;
+          _numInterstitialLoadAttempt++;
+          if (_numInterstitialLoadAttempt <= 3) _initInterstitialAd();
+        },
+      ),
+    );
+  }
+
+  void _loadInterstitialAd() {
+    if (interstitialAd == null) return;
+    interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (InterstitialAd ad) {
+          ad.dispose();
+          _initInterstitialAd();
+        }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+      ad.dispose();
+      _initInterstitialAd();
+    });
+    interstitialAd!.show();
+    interstitialAd = null;
   }
 }

@@ -63,19 +63,19 @@ const List<DropdownMenuItem> DropDownItemList = [
 
 //テキストスタイル
 const lanobeLargeTitleTextStyle = TextStyle(fontSize: 56, color: mainColor, fontFamily: Lanobe);
-const lanobeMediumTextStyle = TextStyle(fontSize: 20, color: Colors.white, fontFamily: Lanobe);
+const lanobeMediumTextStyle = TextStyle(fontSize: 16, color: Colors.white, fontFamily: Lanobe);
 const lanobeQuestionTextStyle = TextStyle(fontSize: 18, color: Colors.black87, fontFamily: Lanobe);
-const lanobeAnswerTextStyle = TextStyle(fontSize: 18, fontFamily: Lanobe, color: subColor);
+const lanobeAnswerTextStyle = TextStyle(fontSize: 18, fontFamily: Lanobe, color: redColor);
 const lanobeFinishTextStyle = TextStyle(fontSize: 60, color: mainColor);
 const lanobeNumberOfQLargeTextStyle = TextStyle(fontSize: 20, fontFamily: Lanobe, color: Colors.black);
-const montMediumTextStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: Mont, color: whiteColor);
+const montMediumTextStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: Mont, color: mainColor);
 const montNumberOfQSmallTextStyle = TextStyle(fontSize: 16, fontFamily: Mont, color: Colors.black);
 const montSmallTextStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w400, fontFamily: Mont);
 
 //カラー
-const mainColor = Color(0xfffcb860);
-const subColor = Color(0xfffb5f66);
-const backgroundColor = Color(0xfff2f2f2);
+const mainColor = Color(0xff733917);
+const subColor = Color(0xffF2D6A2);
+const redColor = Color(0xfffb5f66);
 const whiteColor = Color(0xffffffff);
 
 //フォント

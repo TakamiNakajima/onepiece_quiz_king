@@ -17,7 +17,7 @@ class AnswerCardPart extends StatelessWidget {
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              border: Border.all(color: Color(0xfffb5f66), width: 1.5),
+              border: Border.all(color: Color(0xff733917), width: 1.5),
               borderRadius: BorderRadius.circular(5),
             ),
             child: Padding(

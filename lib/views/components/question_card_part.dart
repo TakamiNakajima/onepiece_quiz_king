@@ -24,7 +24,8 @@ class QuestionCardPart extends StatelessWidget {
             width: double.infinity,
             height: 250,
             decoration: BoxDecoration(
-              border: Border.all(color: Color(0xfffcb860), width: 1.5),
+              color: Color(0xfffffff),
+              border: Border.all(color: Color(0xff733917), width: 1.5),
               borderRadius: BorderRadius.circular(5),
             ),
             child: Container(

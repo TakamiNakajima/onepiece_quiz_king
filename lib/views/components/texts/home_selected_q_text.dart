@@ -9,27 +9,18 @@ class SelectedQText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: subColor,
-        boxShadow: const [
-          BoxShadow(
-            blurRadius: 8,
-            offset: Offset(-6, -6),
-            color: Colors.white,
-          ),
-          BoxShadow(
-            blurRadius: 8,
-            offset: Offset(6, 6),
-            color: Color(0xffa7a9af),
-          ),
-        ]
-      ),
+      color: subColor,
       child: SizedBox(
         width: 300,
         height: 40,
-        child: Center(
-          child: Text(text, style: montMediumTextStyle),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Text(text, style: montMediumTextStyle),
+            ),
+            Icon(Icons.arrow_drop_down_rounded, color: mainColor),
+          ],
         ),
       ),
     );

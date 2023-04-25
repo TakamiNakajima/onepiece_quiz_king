@@ -9,13 +9,13 @@ class QuestionLevelText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (level == 1) {
-      return _testLevelText("レベル：初級");
+      return _testLevelText("レベル：1");
     } else if (level == 2) {
-      return _testLevelText("レベル：中級");
+      return _testLevelText("レベル：2");
     } else if (level == 3) {
-      return _testLevelText("レベル：上級");
+      return _testLevelText("レベル：3");
     } else if (level == 4) {
-      return _testLevelText("レベル：鬼");
+      return _testLevelText("レベル：4");
     } else {
       return Text("");
     }

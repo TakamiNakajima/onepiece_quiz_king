@@ -39,7 +39,7 @@ class _TestScreenState extends State<TestScreen> {
   InterstitialAd? interstitialAd;
 
   int _numInterstitialLoadAttempt = 0;
-  int adCount = 0;
+  int adCount = 5;
 
   int _index = 0; //いま何問目か
   late Word _currentWord = Word(
@@ -61,7 +61,6 @@ class _TestScreenState extends State<TestScreen> {
     );
     _loadBannerAd();
     _initInterstitialAd();
-    adCount = 2;
   }
 
   @override

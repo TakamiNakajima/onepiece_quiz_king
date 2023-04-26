@@ -133,7 +133,7 @@ class _TestScreenState extends State<TestScreen> {
         adCount--;
         if(adCount <= 0){
           _loadInterstitialAd();
-          adCount = 2;
+          adCount = 5;
         }
         _showAnswer(_currentWord);
         break;

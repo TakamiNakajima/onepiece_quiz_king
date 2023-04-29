@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:onepiece_quiz_king/models/data/series.dart';
+import 'package:onepiece_quiz_king/const/const.dart';
 import 'package:onepiece_quiz_king/db/database.dart';
+import 'package:onepiece_quiz_king/models/data/series.dart';
 import 'package:onepiece_quiz_king/main.dart';
-import 'package:onepiece_quiz_king/models/manager/ad_manager.dart';
+import 'package:onepiece_quiz_king/view_models/main_view_model.dart';
+import 'package:onepiece_quiz_king/views/components/buttons/ad_part.dart';
+import 'package:onepiece_quiz_king/views/components/buttons/go_next_button.dart';
 import '../components/answer_card_part.dart';
 import '../components/end_message.dart';
 import '../components/number_of_question_part.dart';
@@ -15,7 +17,6 @@ enum TestStatus { BEFORE_START, SHOW_QUESTION, SHOW_ANSWER, FINISHED }
 
 class TestScreen extends StatefulWidget {
   SERIES series;
-
   TestScreen({required this.series});
 
   @override
@@ -23,66 +24,44 @@ class TestScreen extends StatefulWidget {
 }
 
 class _TestScreenState extends State<TestScreen> {
-  int _numberOfQuestion = 0;
-  String _txtQuestion = "問題";
-  String _txtAnswer = "こたえ";
-
-  bool isQuestionCardVisible = false;
-  bool isAnswerCardVisible = false;
-  bool isCheckBoxVisible = false;
-  bool isFabVisible = false;
-
-  List<Word> _testDataList = [];
-  TestStatus _testStatus = TestStatus.BEFORE_START;
-
-  BannerAd? bannerAd;
-  InterstitialAd? interstitialAd;
-
-  int _numInterstitialLoadAttempt = 0;
-  int adCount = 5;
-
-  int _index = 0; //いま何問目か
-  late Word _currentWord = Word(
-      strQuestion: "strQuestion",
-      strAnswer: "strAnswer",
-      isMemorized: false,
-      series: 1,
-      level: 1);
+  MainViewModel _mainViewModel = MainViewModel();
+  Word currentWord = Word(
+    strQuestion: "",
+    strAnswer: "",
+    isMemorized: false,
+    series: 1,
+    level: 1,
+  );
 
   @override
   void initState() {
     super.initState();
     _getTestData();
-    bannerAd = BannerAd(
-      size: AdSize.banner,
-      adUnitId: AdManager.bannerAdUnitId,
-      listener: BannerAdListener(),
-      request: AdRequest(),
-    );
-    _loadBannerAd();
-    _initInterstitialAd();
+    _mainViewModel.getBannerAd();
+    _mainViewModel.loadBannerAd();
+    _mainViewModel.initInterstitialAd(_mainViewModel.interstitialAd);
   }
 
   @override
   void dispose() {
     super.dispose();
-    bannerAd?.dispose();
-    interstitialAd?.dispose();
+    _mainViewModel.bannerAd?.dispose();
+    _mainViewModel.interstitialAd?.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: Color(0xffF2D6A2),
+      backgroundColor: subColor,
       navigationBar: CupertinoNavigationBar(
         middle: TestScreenTitleText(series: widget.series),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          child: Icon(Icons.arrow_back_ios_new_rounded, color: whiteColor),
         ),
-        backgroundColor: Color(0xff733917),
+        backgroundColor: mainColor,
       ),
       child: Padding(
         padding: const EdgeInsets.only(top: 20, bottom: 20),
@@ -94,27 +73,35 @@ class _TestScreenState extends State<TestScreen> {
               children: [
                 SizedBox(height: 20),
                 //のこり問題数表示部分
-                NumberOfQuestionPart(numberOfQuestion: _numberOfQuestion),
+                NumberOfQuestionPart(numberOfQuestion: _mainViewModel.numberOfQuestion),
                 SizedBox(height: 20),
-                //問題カード表示部分
+                // 問題カード表示部分
                 QuestionCardPart(
-                  isQuestionCardVisible: isQuestionCardVisible,
-                  txtQuestion: _txtQuestion,
-                  level: _currentWord.level,
+                  isQuestionCardVisible: _mainViewModel.isQuestionCardVisible,
+                  txtQuestion: _mainViewModel.txtQuestion,
+                  level: currentWord.level,
                 ),
                 //こたえカード表示部分
                 AnswerCardPart(
-                  isAnswerCardVisible: isAnswerCardVisible,
-                  txtAnswer: _txtAnswer,
+                  isAnswerCardVisible: _mainViewModel.isAnswerCardVisible,
+                  txtAnswer: _mainViewModel.txtAnswer,
                 ),
                 SizedBox(height: 40),
               ],
             ),
             //次へボタン
-            Positioned(right: 30, bottom: 70, child: _goNextButton()),
+            Positioned(
+              right: 30,
+              bottom: 70,
+              child: GoNextButton(
+                isFabVisible: _mainViewModel.isFabVisible,
+                testDataList: _mainViewModel.testDataList,
+                onPressed: () => _goNextStatus(),
+              ),
+            ),
             //終了メッセージ
-            EndMessage(testStatus: _testStatus),
-            adPart(bannerAd),
+            EndMessage(testStatus: _mainViewModel.testStatus),
+            AdPart(bannerAd: _mainViewModel.bannerAd),
           ],
         ),
       ),
@@ -122,29 +109,29 @@ class _TestScreenState extends State<TestScreen> {
   }
 
   _goNextStatus() async {
-    switch (_testStatus) {
+    switch (_mainViewModel.testStatus) {
       case TestStatus.BEFORE_START:
-        _testStatus = TestStatus.SHOW_QUESTION;
+        _mainViewModel.testStatus = TestStatus.SHOW_QUESTION;
         _showQuestion();
         break;
       case TestStatus.SHOW_QUESTION:
-        _testStatus = TestStatus.SHOW_ANSWER;
-        adCount--;
-        if(adCount <= 0){
-          _loadInterstitialAd();
-          adCount = 5;
+        _mainViewModel.testStatus = TestStatus.SHOW_ANSWER;
+        _mainViewModel.adCount--;
+        if (_mainViewModel.adCount <= 0) {
+          _mainViewModel.loadInterstitialAd(_mainViewModel.interstitialAd);
+          _mainViewModel.adCount = 5;
         }
-        _showAnswer(_currentWord);
+        _showAnswer(currentWord);
         break;
       case TestStatus.SHOW_ANSWER:
         // await _updateMemorizedFlag();
-        if (_numberOfQuestion <= 0) {
+        if (_mainViewModel.numberOfQuestion <= 0) {
           setState(() {
-            isFabVisible = false;
-            _testStatus = TestStatus.FINISHED;
+            _mainViewModel.isFabVisible = false;
+            _mainViewModel.testStatus = TestStatus.FINISHED;
           });
         } else {
-          _testStatus = TestStatus.SHOW_QUESTION;
+          _mainViewModel.testStatus = TestStatus.SHOW_QUESTION;
           _showQuestion();
         }
         break;
@@ -154,148 +141,79 @@ class _TestScreenState extends State<TestScreen> {
   }
 
   void _showQuestion() {
-    _currentWord = _testDataList[_index];
+    currentWord = _mainViewModel.testDataList[_mainViewModel.index];
     setState(() {
-      isQuestionCardVisible = true;
-      isAnswerCardVisible = false;
-      isCheckBoxVisible = false;
-      isFabVisible = true;
-      _txtQuestion = _currentWord.strQuestion;
+      _mainViewModel.changeStatusOnShowQuestion(currentWord);
     });
-    _numberOfQuestion -= 1;
-    _index += 1;
+    _mainViewModel.numberOfQuestion -= 1;
+    _mainViewModel.index += 1;
   }
 
-  void _showAnswer(_currentWord) {
+  void _showAnswer(currentWord) {
     setState(() {
-      isQuestionCardVisible = true;
-      isAnswerCardVisible = true;
-      isCheckBoxVisible = true;
-      isFabVisible = true;
+      _mainViewModel.changeStatusOnShowAnswer();
     });
-    _txtAnswer = _currentWord.strAnswer;
-    // _isMemorized = _currentWord.isMemorized;
+    _mainViewModel.txtAnswer = currentWord.strAnswer;
   }
 
   void _getTestData() async {
     switch (widget.series) {
       case SERIES.ALL:
-        _testDataList = await database.allWords;
+        _mainViewModel.testDataList = await database.allWords;
         break;
       case SERIES.LEVEL1:
-        _testDataList = await database.allWordsOflevel1;
+        _mainViewModel.testDataList = await database.allWordsOflevel1;
         break;
       case SERIES.LEVEL2:
-        _testDataList = await database.allWordsOflevel2;
+        _mainViewModel.testDataList = await database.allWordsOflevel2;
         break;
       case SERIES.LEVEL3:
-        _testDataList = await database.allWordsOflevel3;
+        _mainViewModel.testDataList = await database.allWordsOflevel3;
         break;
       case SERIES.LEVEL4:
-        _testDataList = await database.allWordsOflevel4;
+        _mainViewModel.testDataList = await database.allWordsOflevel4;
         break;
       case SERIES.EASTBLUE:
-        _testDataList = await database.seriesOfEastBlue;
+        _mainViewModel.testDataList = await database.seriesOfEastBlue;
         break;
       case SERIES.ALABASTA:
-        _testDataList = await database.seriesOfAlaBasta;
+        _mainViewModel.testDataList = await database.seriesOfAlaBasta;
         break;
       case SERIES.SKYISLAND:
-        _testDataList = await database.seriesOfSkyIsland;
+        _mainViewModel.testDataList = await database.seriesOfSkyIsland;
         break;
       case SERIES.WATERSEVEN:
-        _testDataList = await database.seriesOfWaterSeven;
+        _mainViewModel.testDataList = await database.seriesOfWaterSeven;
         break;
       case SERIES.THRILLERBARK:
-        _testDataList = await database.seriesOfThrillerBark;
+        _mainViewModel.testDataList = await database.seriesOfThrillerBark;
         break;
       case SERIES.IMPELDOWN:
-        _testDataList = await database.seriesOfImpelDown;
+        _mainViewModel.testDataList = await database.seriesOfImpelDown;
         break;
       case SERIES.FISHMANISLAND:
-        _testDataList = await database.seriesOfFishmanIsland;
+        _mainViewModel.testDataList = await database.seriesOfFishmanIsland;
         break;
       case SERIES.DRESSROSA:
-        _testDataList = await database.seriesOfDressRosa;
+        _mainViewModel.testDataList = await database.seriesOfDressRosa;
         break;
       case SERIES.WHOLECAKEISLAND:
-        _testDataList = await database.seriesOfWholeCakeIsland;
+        _mainViewModel.testDataList = await database.seriesOfWholeCakeIsland;
         break;
       case SERIES.WANOKUNI:
-        _testDataList = await database.seriesOfWaNoKuni;
+        _mainViewModel.testDataList = await database.seriesOfWaNoKuni;
         break;
     }
-    _testDataList.shuffle();
-    _testStatus = TestStatus.BEFORE_START;
-    _index = 0;
+    _mainViewModel.testDataList.shuffle();
+    _mainViewModel.testStatus = TestStatus.BEFORE_START;
+    _mainViewModel.index = 0;
 
     setState(() {
-      isQuestionCardVisible = false;
-      isAnswerCardVisible = false;
-      isCheckBoxVisible = false;
-      isFabVisible = true;
-      _numberOfQuestion = _testDataList.length;
+      _mainViewModel.isQuestionCardVisible = false;
+      _mainViewModel.isAnswerCardVisible = false;
+      _mainViewModel.isCheckBoxVisible = false;
+      _mainViewModel.isFabVisible = true;
+      _mainViewModel.numberOfQuestion = _mainViewModel.testDataList.length;
     });
-  }
-
-  Widget _goNextButton() {
-    return (isFabVisible && _testDataList.isNotEmpty)
-        ? FloatingActionButton(
-            onPressed: _goNextStatus,
-            child: Icon(Icons.skip_next),
-            backgroundColor: Color(0xff733917),
-          )
-        : Container();
-  }
-
-  void _loadBannerAd() {
-    bannerAd?.load();
-  }
-
-  Widget adPart(bannerAd) {
-    return Positioned(
-      left: 20,
-      right: 20,
-      bottom: 8,
-      child: (bannerAd == null)
-          ? Container(width: 0, height: 0)
-          : Container(
-              width: bannerAd?.size.width.toDouble(),
-              height: bannerAd?.size.height.toDouble(),
-              child: AdWidget(ad: bannerAd),
-            ),
-    );
-  }
-
-  void _initInterstitialAd() {
-    InterstitialAd.load(
-      adUnitId: AdManager.interstitialAdUnitId,
-      request: AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (InterstitialAd ad) {
-          interstitialAd = ad;
-          _numInterstitialLoadAttempt = 0;
-        },
-        onAdFailedToLoad: (LoadAdError error) {
-          interstitialAd = null;
-          _numInterstitialLoadAttempt++;
-          if (_numInterstitialLoadAttempt <= 3) _initInterstitialAd();
-        },
-      ),
-    );
-  }
-
-  void _loadInterstitialAd() {
-    if (interstitialAd == null) return;
-    interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-        onAdDismissedFullScreenContent: (InterstitialAd ad) {
-          ad.dispose();
-          _initInterstitialAd();
-        }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-      ad.dispose();
-      _initInterstitialAd();
-    });
-    interstitialAd!.show();
-    interstitialAd = null;
   }
 }

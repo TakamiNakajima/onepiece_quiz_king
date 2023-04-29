@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 
 class GoNextButton extends StatelessWidget {
-  late bool isFabVisible;
-  late List testDataList;
-  late VoidCallback onPressed;
+  final bool isFabVisible;
+  final List testDataList;
+  final onPressed;
 
-  GoNextButton({
-    required this.isFabVisible,
-    required this.testDataList,
-    required this.onPressed,
-  });
+  GoNextButton({required this.isFabVisible, required this.testDataList , required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return (isFabVisible && testDataList.isNotEmpty)
-        ? TextButton(
+        ? FloatingActionButton(
             onPressed: onPressed,
-            child: Text("次へ", style: (TextStyle(fontSize: 16))),
+            child: Icon(Icons.skip_next),
+            backgroundColor: Color(0xff733917),
           )
         : Container();
   }

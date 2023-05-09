@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onepiece_quiz_king/const/const.dart';
-import '../screens/test_screen.dart';
+import 'package:onepiece_quiz_king/views/screens/test_2_screen.dart';
 
 class EndMessage extends StatelessWidget {
   late TestStatus testStatus;
@@ -14,6 +14,6 @@ class EndMessage extends StatelessWidget {
           child: Text("クイズ終了", style: lanobeFinishTextStyle));
     } else {
       return Container();
-    };
+    }
   }
 }

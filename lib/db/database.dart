@@ -10,6 +10,8 @@ class Words extends Table {
   BoolColumn get isMemorized => boolean().withDefault(Constant(false))();
   IntColumn get series => integer()();
   IntColumn get level => integer()();
+  TextColumn get fakeFirst => text()();
+  TextColumn get fakeSecond => text()();
 }
 
 @DriftDatabase(tables: [Words])
@@ -19,7 +21,7 @@ class MyDatabase extends _$MyDatabase {
   MyDatabase({required this.dbPath}) : super(_openConnection(dbPath));
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   // //Create
   // Future addWord(Questions questions) => into(words).insert(word);

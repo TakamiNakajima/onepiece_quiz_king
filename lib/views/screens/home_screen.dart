@@ -6,7 +6,7 @@ import 'package:onepiece_quiz_king/models/data/series.dart';
 import 'package:onepiece_quiz_king/models/manager/ad_manager.dart';
 import 'package:onepiece_quiz_king/views/components/texts/selected_series_text.dart';
 import 'package:onepiece_quiz_king/views/components/texts/title_text.dart';
-import 'package:onepiece_quiz_king/views/screens/test_screen.dart';
+import 'package:onepiece_quiz_king/views/screens/test_2_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             CupertinoPageRoute(
                               builder: (context) =>
-                                  TestScreen(series: _selectedSeries),
+                                  Test2Screen(series: _selectedSeries),
                             ),
                           );
                         },
@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  adPart(BannerAd? bannerAd) {
+  Widget adPart(BannerAd? bannerAd) {
     return Positioned(
       left: 20,
       right: 20,

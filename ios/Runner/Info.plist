@@ -40,6 +40,8 @@
 	<false/>
 	<key>GADApplicationIdentifier</key>
     <string>ca-app-pub-1619631561259489~3852130778</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>このアプリはマイクを使用します</string>
     <key>SKAdNetworkItems</key>
       <array>
         <dict>

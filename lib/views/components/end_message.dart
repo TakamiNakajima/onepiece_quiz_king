@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onepiece_quiz_king/const/const.dart';
-import 'package:onepiece_quiz_king/views/screens/test_2_screen.dart';
+import 'package:onepiece_quiz_king/enum/enum.dart';
 
 class EndMessage extends StatelessWidget {
   late TestStatus testStatus;

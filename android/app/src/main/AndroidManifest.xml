@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.takaminalkajima.onepiecequizking.onepiece_quiz_king">
-   <application
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application
         android:label="麦ちゃんクイズ"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">

@@ -6,7 +6,7 @@ import 'package:onepiece_quiz_king/models/data/series.dart';
 import 'package:onepiece_quiz_king/models/manager/ad_manager.dart';
 import 'package:onepiece_quiz_king/views/components/texts/selected_series_text.dart';
 import 'package:onepiece_quiz_king/views/components/texts/title_text.dart';
-import 'package:onepiece_quiz_king/views/screens/test_2_screen.dart';
+import 'package:onepiece_quiz_king/views/screens/test_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: Color(0xfff2d6a2),
+      backgroundColor: subColor,
       child: SafeArea(
         child: Center(
           child: Stack(
@@ -80,8 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               if (DropDownItemList[value].value != null) {
                                 setState(
                                   () {
-                                    _selectedSeries =
-                                        DropDownItemList[value].value;
+                                    _selectedSeries = DropDownItemList[value].value;
                                   },
                                 );
                               }
@@ -89,8 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      child:
-                          SelectedSeriesText(selectedSeries: _selectedSeries),
+                      child: SelectedSeriesText(selectedSeries: _selectedSeries),
                     ),
                     //スタートボタン
                     SizedBox(
@@ -103,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             CupertinoPageRoute(
                               builder: (context) =>
-                                  Test2Screen(series: _selectedSeries),
+                                  TestScreen(series: _selectedSeries),
                             ),
                           );
                         },

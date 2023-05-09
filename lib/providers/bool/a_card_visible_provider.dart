@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final aCardVisibleProvider = StateProvider<bool>(
+final maruOrBatuProvider = StateProvider<bool>(
   (ref) => false,
 );

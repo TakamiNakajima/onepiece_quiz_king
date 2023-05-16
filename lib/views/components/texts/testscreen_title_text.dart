@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onepiece_quiz_king/const/const.dart';
-import 'package:onepiece_quiz_king/models/data/series.dart';
+import 'package:onepiece_quiz_king/enum/enum.dart';
 
 class TestScreenTitleText extends StatelessWidget {
   late SERIES series;
@@ -11,14 +11,6 @@ class TestScreenTitleText extends StatelessWidget {
   Widget build(BuildContext context) {
     if (series == SERIES.ALL) {
       return testTitleText("全ての問題");
-    } else if (series == SERIES.LEVEL1) {
-      return testTitleText("初級");
-    } else if (series == SERIES.LEVEL2) {
-      return testTitleText("中級");
-    } else if (series == SERIES.LEVEL3) {
-      return testTitleText("上級");
-    } else if (series == SERIES.LEVEL4) {
-      return testTitleText("鬼");
     } else if (series == SERIES.EASTBLUE) {
       return testTitleText("イーストブルー編");
     } else if (series == SERIES.ALABASTA) {

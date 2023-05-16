@@ -1,45 +1,11 @@
 import 'package:flutter/material.dart';
-import '../models/data/series.dart';
+import 'package:onepiece_quiz_king/enum/enum.dart';
 
 const List<DropdownMenuItem> DropDownItemList = [
   DropdownMenuItem<SERIES>(
       value: SERIES.ALL,
       child: Center(
           child: Text("すべての問題",
-              style:
-                  TextStyle(fontFamily: "Mont", fontWeight: FontWeight.w700)))),
-  DropdownMenuItem<SERIES>(
-      value: null,
-      child: Center(
-          child: Text("レベル別",
-              style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black26,
-                  fontFamily: "Mont",
-                  fontWeight: FontWeight.w400))),
-      enabled: false),
-  DropdownMenuItem<SERIES>(
-      value: SERIES.LEVEL1,
-      child: Center(
-          child: Text("初級",
-              style:
-                  TextStyle(fontFamily: "Mont", fontWeight: FontWeight.w700)))),
-  DropdownMenuItem<SERIES>(
-      value: SERIES.LEVEL2,
-      child: Center(
-          child: Text("中級",
-              style:
-                  TextStyle(fontFamily: "Mont", fontWeight: FontWeight.w700)))),
-  DropdownMenuItem<SERIES>(
-      value: SERIES.LEVEL3,
-      child: Center(
-          child: Text("上級",
-              style:
-                  TextStyle(fontFamily: "Mont", fontWeight: FontWeight.w700)))),
-  DropdownMenuItem<SERIES>(
-      value: SERIES.LEVEL4,
-      child: Center(
-          child: Text("鬼",
               style:
                   TextStyle(fontFamily: "Mont", fontWeight: FontWeight.w700)))),
   DropdownMenuItem<SERIES>(
@@ -124,7 +90,7 @@ const lanobeQuestionTextStyle =
 const lanobeAnswerTextStyle =
     TextStyle(fontSize: 18, fontFamily: Lanobe, color: redColor);
 const AnswerTextStyle =
-    TextStyle(fontSize: 32, fontFamily: Lanobe, color: Colors.white);
+    TextStyle(fontSize: 28, fontFamily: Lanobe, color: Colors.white);
 const lanobeFinishTextStyle = TextStyle(fontSize: 60, color: mainColor);
 const lanobeNumberOfQLargeTextStyle =
     TextStyle(fontSize: 20, fontFamily: Lanobe, color: Colors.black);

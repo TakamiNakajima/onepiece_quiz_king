@@ -8,21 +8,14 @@ class SelectedQText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: subColor,
-      child: SizedBox(
-        width: 300,
-        height: 40,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: Text(text, style: montMediumTextStyle),
-            ),
-            Icon(Icons.arrow_drop_down_rounded, color: mainColor),
-          ],
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: Text(text, style: montMediumTextStyle),
         ),
-      ),
+        Icon(Icons.arrow_drop_down_rounded, color: mainColor),
+      ],
     );
   }
 }

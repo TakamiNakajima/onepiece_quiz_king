@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:onepiece_quiz_king/const/const.dart';
-import 'package:onepiece_quiz_king/models/data/series.dart';
+import 'package:onepiece_quiz_king/enum/enum.dart';
 import 'package:onepiece_quiz_king/models/manager/ad_manager.dart';
 import 'package:onepiece_quiz_king/views/components/texts/selected_series_text.dart';
 import 'package:onepiece_quiz_king/views/components/texts/title_text.dart';
@@ -18,7 +18,6 @@ class _HomeScreenState extends State<HomeScreen> {
   SERIES _selectedSeries = SERIES.ALL;
   BannerAd? bannerAd;
   InterstitialAd? interstitialAd;
-
   int _numInterstitialLoadAttempt = 0;
 
   @override
@@ -63,32 +62,39 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    TextButton(
-                      onPressed: () => showCupertinoModalPopup(
-                        context: context,
-                        builder: (_) => SizedBox(
-                          width: double.infinity,
-                          height: 300,
-                          child: CupertinoPicker(
-                            backgroundColor: Colors.white,
-                            itemExtent: 40,
-                            scrollController: FixedExtentScrollController(
-                              initialItem: 1,
+                    SizedBox(
+                      height: 44,
+                      width: MediaQuery.of(context).size.width *  7/10,
+                      child: ElevatedButton(
+                        onPressed: () => showCupertinoModalPopup(
+                          context: context,
+                          builder: (_) => SizedBox(
+                            width: double.infinity,
+                            height: 300,
+                            child: CupertinoPicker(
+                              backgroundColor: Colors.white,
+                              itemExtent: 40,
+                              scrollController: FixedExtentScrollController(
+                                initialItem: 1,
+                              ),
+                              children: DropDownItemList,
+                              onSelectedItemChanged: (int value) {
+                                if (DropDownItemList[value].value != null) {
+                                  setState(
+                                    () {
+                                      _selectedSeries = DropDownItemList[value].value;
+                                    },
+                                  );
+                                }
+                              },
                             ),
-                            children: DropDownItemList,
-                            onSelectedItemChanged: (int value) {
-                              if (DropDownItemList[value].value != null) {
-                                setState(
-                                  () {
-                                    _selectedSeries = DropDownItemList[value].value;
-                                  },
-                                );
-                              }
-                            },
                           ),
                         ),
+                        child: SelectedSeriesText(selectedSeries: _selectedSeries),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: subColor,
+                        ),
                       ),
-                      child: SelectedSeriesText(selectedSeries: _selectedSeries),
                     ),
                     //スタートボタン
                     SizedBox(

@@ -23,30 +23,8 @@ class MyDatabase extends _$MyDatabase {
   @override
   int get schemaVersion => 3;
 
-  // //Create
-  // Future addWord(Questions questions) => into(words).insert(word);
-
   //Read(全ての問題)
   Future<List<Word>> get allWords => select(words).get();
-
-  //Read(全ての問題(レベル：初級))
-  Future<List<Word>> get allWordsOflevel1 =>
-      (select(words)..where((table) => table.level.equals(1))).get();
-
-  //Read(全ての問題(レベル：中級))
-  Future<List<Word>> get allWordsOflevel2 =>
-      (select(words)..where((table) => table.level.equals(2))).get();
-
-  //Read(全ての問題(レベル：上級))
-  Future<List<Word>> get allWordsOflevel3 =>
-      (select(words)..where((table) => table.level.equals(3))).get();
-
-  Future<List<Word>> get allWordsOflevel4 =>
-      (select(words)..where((table) => table.level.equals(4))).get();
-
-  // //Read(正解済みを除外)
-  // Future<List<Word>> get allWordsExcludedMemorized =>
-  //     (select(words)..where((table) => table.isMemorized.equals(false))).get();
 
   //Read(イーストブルー編)
   Future<List<Word>> get seriesOfEastBlue =>
@@ -87,14 +65,6 @@ class MyDatabase extends _$MyDatabase {
   //Read(ワノ国編)
   Future<List<Word>> get seriesOfWaNoKuni =>
       (select(words)..where((table) => table.series.equals(10))).get();
-
-//Update
-  Future updateWord(Word word) => update(words).replace(word);
-
-//Delete
-  Future deleteWord(Word word) =>
-      (delete(words)..where((t) => t.strQuestion.equals(word.strQuestion)))
-          .go();
 }
 
 LazyDatabase _openConnection(String dbPath) {

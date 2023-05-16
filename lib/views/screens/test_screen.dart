@@ -1,37 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:onepiece_quiz_king/const/const.dart';
-import 'package:onepiece_quiz_king/db/database.dart';
 import 'package:onepiece_quiz_king/enum/enum.dart';
-import 'package:onepiece_quiz_king/main.dart';
-import 'package:onepiece_quiz_king/models/data/series.dart';
-import 'package:onepiece_quiz_king/models/manager/ad_manager.dart';
 import 'package:onepiece_quiz_king/providers/bool/a_card_visible_provider.dart';
 import 'package:onepiece_quiz_king/providers/bool/is_able_to_press_provider.dart';
 import 'package:onepiece_quiz_king/providers/bool/is_fab_visible_provider.dart';
 import 'package:onepiece_quiz_king/providers/bool/q_card_visible_provider.dart';
 import 'package:onepiece_quiz_king/providers/bool/selected_a_correct_provider.dart';
 import 'package:onepiece_quiz_king/providers/int/ad_count_provider.dart';
-import 'package:onepiece_quiz_king/providers/int/interstitial_load_attempt_provider.dart';
 import 'package:onepiece_quiz_king/providers/int/number_of_question_provider.dart';
 import 'package:onepiece_quiz_king/providers/int/q_index_provider.dart';
 import 'package:onepiece_quiz_king/providers/list/answer_list_provider.dart';
 import 'package:onepiece_quiz_king/providers/list/test_data_list_provider.dart';
 import 'package:onepiece_quiz_king/providers/string/question_txt_provider.dart';
 import 'package:onepiece_quiz_king/providers/test_status/test_status_provider.dart';
-import 'package:onepiece_quiz_king/views/components/buttons/ad_part.dart';
+import 'package:onepiece_quiz_king/view_model/ad_view_model.dart';
+import 'package:onepiece_quiz_king/view_model/main_view_model.dart';
 import 'package:onepiece_quiz_king/views/components/buttons/go_next_button.dart';
 import 'package:onepiece_quiz_king/views/components/end_message.dart';
 import 'package:onepiece_quiz_king/views/components/number_of_question_part.dart';
 import 'package:onepiece_quiz_king/views/components/question_card_part.dart';
 import 'package:onepiece_quiz_king/views/components/texts/testscreen_title_text.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:onepiece_quiz_king/views/components/corrected_Image_and_answer.dart';
 
 class TestScreen extends ConsumerStatefulWidget {
   SERIES series;
-
   TestScreen({required this.series});
 
   @override
@@ -39,51 +34,26 @@ class TestScreen extends ConsumerStatefulWidget {
 }
 
 class TestScreenState extends ConsumerState<TestScreen> {
-  late AudioPlayer _audioPlayer;
-  BannerAd? bannerAd;
-  InterstitialAd? interstitialAd;
-  late Word currentWord = Word(
-    strQuestion: "",
-    strAnswer: "",
-    isMemorized: false,
-    series: 1,
-    level: 1,
-    fakeFirst: '',
-    fakeSecond: '',
-  );
+  MainViewModel _mainViewModel = MainViewModel();
+  AdViewModel _adViewModel = AdViewModel();
 
   @override
   void initState() {
     super.initState();
-    _getTestData();
+    _mainViewModel.getTestData(ref, widget.series);
     // _initBannerAd();
-    _initInterstitialAd();
-    _readAllProviders();
-    _audioPlayer = AudioPlayer();
-  }
-
-  void _readAllProviders() {
-    ref.read(qCardVisibleProvider);
-    ref.read(maruOrBatuProvider);
-    ref.read(isFabVisibleProvider);
-    ref.read(selectedACorrectProvider);
-    ref.read(isAbleToPressProvider);
-    ref.read(qTxtProvider);
-    ref.read(numberOfQuestionProvider);
-    ref.read(questionIndexProvider);
-    ref.read(adCountProvider);
-    ref.read(testStatusProvider);
-    ref.read(answersListProvider);
-    ref.read(testDataListProvider);
-    ref.read(interstitialNumProvider);
+    _adViewModel.initInterstitialAd(ref);
+    // _adViewModel.loadBannerAd();
+    _mainViewModel.readAllProviders(ref);
+    _mainViewModel.audioPlayer = AudioPlayer();
   }
 
   @override
   void dispose() {
     super.dispose();
-    bannerAd?.dispose();
-    interstitialAd?.dispose();
-    _audioPlayer.dispose();
+    _adViewModel.bannerAd?.dispose();
+    _adViewModel.interstitialAd?.dispose();
+    _mainViewModel.audioPlayer.dispose();
   }
 
   @override
@@ -98,7 +68,6 @@ class TestScreenState extends ConsumerState<TestScreen> {
     final testStatusP = ref.watch(testStatusProvider);
     final answersListP = ref.watch(answersListProvider);
     final testDataListP = ref.watch(testDataListProvider);
-    // Future(() => _loadBannerAd());
     return CupertinoPageScaffold(
       backgroundColor: subColor,
       navigationBar: CupertinoNavigationBar(
@@ -125,133 +94,134 @@ class TestScreenState extends ConsumerState<TestScreen> {
               QuestionCardPart(
                 isQuestionCardVisible: isQCardVisible,
                 txtQuestion: questionText,
-                level: currentWord.level,
+                level: _mainViewModel.currentWord.level,
               ),
               //選択肢カード表示部分
               isQCardVisible
                   ? Padding(
-                      padding:
-                          const EdgeInsets.only(top: 50.0, left: 20, right: 20),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: answersListP.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final item = answersListP[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Material(
-                              color: subColor,
-                              child: InkWell(
-                                onTap: () => ableToPress
-                                    ? _checkAnswer(item, currentWord.strAnswer)
-                                    : null,
-                                child: Card(
-                                  elevation: 4,
-                                  child: Container(
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: redColor, width: 1.5),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              item,
-                                              style: lanobeAnswerTextStyle,
-                                            ),
-                                          ],
-                                        ),
+                padding:
+                const EdgeInsets.only(top: 50.0, left: 20, right: 20),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: answersListP.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final item = answersListP[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Material(
+                        color: subColor,
+                        child: InkWell(
+                          onTap: () => ableToPress
+                              ? _checkAnswer(item, _mainViewModel.currentWord.strAnswer)
+                              : null,
+                          child: Card(
+                            elevation: 4,
+                            child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: redColor, width: 1.5),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        item,
+                                        style: lanobeAnswerTextStyle,
                                       ),
-                                    ),
+                                    ],
                                   ),
                                 ),
                               ),
                             ),
-                          );
-                        },
+                          ),
+                        ),
                       ),
-                    )
+                    );
+                  },
+                ),
+              )
                   : Container(),
               SizedBox(height: 40),
             ],
           ),
           //次へボタン
-          Positioned(
-            right: 30,
-            bottom: 70,
-            child: GoNextButton(
-              isFabVisible: isFabVisible,
-              testDataList: testDataListP,
-              onPressed: () => _goNextStatus(),
-            ),
+          GoNextButton(
+            isFabVisible: isFabVisible,
+            testDataList: testDataListP,
+            onPressed: () => _goNextStatus(),
           ),
           //終了メッセージ
           EndMessage(testStatus: testStatusP),
-          // AdPart(bannerAd: bannerAd),
+          // AdPart(bannerAd: _adViewModel.bannerAd),
           //正解のとき
           maruOrBatuVisible && selectedACorrect
-              ? Stack(
-                  children: [
-                    Container(
-                      height: double.infinity,
-                      width: MediaQuery.of(context).size.width,
-                      color: Colors.black54,
-                    ),
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset("assets/images/pic_correct.png"),
-                          SizedBox(height: 30),
-                          Wrap(
-                            children: [
-                              Text("答え 『${currentWord.strAnswer}』",
-                                  style: AnswerTextStyle),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
+              ? CorrectedImageAndAnswer(
+                  isCorrected: true, currentWord: _mainViewModel.currentWord)
               : Container(),
           //不正解のとき
           maruOrBatuVisible && !selectedACorrect
-              ? Stack(
-                  children: [
-                    Container(
-                      height: double.infinity,
-                      width: MediaQuery.of(context).size.width,
-                      color: Colors.black54,
-                    ),
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset("assets/images/pic_incorrect.png"),
-                          SizedBox(height: 30),
-                          Wrap(
-                            children: [
-                              Text("答え 『${currentWord.strAnswer}』",
-                                  style: AnswerTextStyle),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
+              ? CorrectedImageAndAnswer(
+                  isCorrected: false, currentWord: _mainViewModel.currentWord)
               : Container(),
         ],
       ),
     );
+  }
+
+  void _checkAnswer(String selectedAnswer, String correctAnswer) async {
+    ref.read(testStatusProvider.notifier).state = TestStatus.SHOW_ANSWER;
+    ref.read(qCardVisibleProvider.notifier).state = true;
+    ref.read(maruOrBatuProvider.notifier).state = true;
+    ref.read(isFabVisibleProvider.notifier).state = false;
+    ref.read(isAbleToPressProvider.notifier).state = false;
+    if (selectedAnswer == correctAnswer) {
+      ref.read(selectedACorrectProvider.notifier).state = true;
+      ref.read(maruOrBatuProvider.notifier).state = true;
+      await _mainViewModel.audioPlayer.setAsset("assets/sounds/sound_correct.mp3");
+      _mainViewModel.audioPlayer.play();
+      await Future.delayed(Duration(seconds: 2));
+      ref.read(adCountProvider.notifier).state--;
+      if (ref.watch(adCountProvider) <= 0) {
+        _adViewModel.loadInterstitialAd(ref);
+        ref.read(adCountProvider.notifier).state = 5;
+      }
+      if (ref.watch(numberOfQuestionProvider) <= 0) {
+        ref.read(isFabVisibleProvider.notifier).state = false;
+        ref.read(testStatusProvider.notifier).state = TestStatus.FINISHED;
+        ref.read(answersListProvider.notifier).state = [];
+      } else {
+        ref.read(testStatusProvider.notifier).state = TestStatus.SHOW_QUESTION;
+        ref.read(answersListProvider.notifier).state = [];
+        _showQuestion();
+      }
+    } else {
+      ref.read(selectedACorrectProvider.notifier).state = false;
+      ref.read(maruOrBatuProvider.notifier).state = true;
+      await _mainViewModel.audioPlayer.setAsset("assets/sounds/sound_incorrect.mp3");
+      _mainViewModel.audioPlayer.play();
+      await Future.delayed(Duration(seconds: 2));
+      ref.read(adCountProvider.notifier).state--;
+      if (ref.watch(adCountProvider) <= 0) {
+        _adViewModel.loadInterstitialAd(ref);
+        ref.read(adCountProvider.notifier).state = 5;
+      }
+      if (ref.watch(numberOfQuestionProvider) <= 0) {
+        ref.read(isFabVisibleProvider.notifier).state = false;
+        ref.read(answersListProvider.notifier).state = [];
+        ref.read(testStatusProvider.notifier).state = TestStatus.FINISHED;
+      } else {
+        ref.read(testStatusProvider.notifier).state = TestStatus.SHOW_QUESTION;
+        ref.read(answersListProvider.notifier).state = [];
+        _showQuestion();
+      }
+    }
   }
 
   _goNextStatus() async {
@@ -281,203 +251,22 @@ class TestScreenState extends ConsumerState<TestScreen> {
   }
 
   void _showQuestion() async {
-    currentWord = ref.watch(testDataListProvider)[ref.watch(questionIndexProvider)];
-    await _refreshAnswerList();
+    _mainViewModel.currentWord = ref.watch(testDataListProvider)[ref.watch(questionIndexProvider)];
+    await refreshAnswerList();
     ref.read(qCardVisibleProvider.notifier).state = true;
     ref.read(maruOrBatuProvider.notifier).state = false;
     ref.read(isFabVisibleProvider.notifier).state = false;
     ref.read(isAbleToPressProvider.notifier).state = true;
-    ref.read(qTxtProvider.notifier).state = currentWord.strQuestion;
+    ref.read(qTxtProvider.notifier).state = _mainViewModel.currentWord.strQuestion;
     ref.read(numberOfQuestionProvider.notifier).state -= 1;
     ref.read(questionIndexProvider.notifier).state += 1;
   }
 
-  void _getTestData() async {
-    switch (widget.series) {
-      case SERIES.ALL:
-        ref.read(testDataListProvider.notifier).state = await database.allWords;
-        break;
-      case SERIES.LEVEL1:
-        ref.read(testDataListProvider.notifier).state =
-            await database.allWordsOflevel1;
-        break;
-      case SERIES.LEVEL2:
-        ref.read(testDataListProvider.notifier).state =
-            await database.allWordsOflevel2;
-        break;
-      case SERIES.LEVEL3:
-        ref.read(testDataListProvider.notifier).state =
-            await database.allWordsOflevel3;
-        break;
-      case SERIES.LEVEL4:
-        ref.read(testDataListProvider.notifier).state =
-            await database.allWordsOflevel4;
-        break;
-      case SERIES.EASTBLUE:
-        ref.read(testDataListProvider.notifier).state =
-            await database.seriesOfEastBlue;
-        break;
-      case SERIES.ALABASTA:
-        ref.read(testDataListProvider.notifier).state =
-            await database.seriesOfAlaBasta;
-        break;
-      case SERIES.SKYISLAND:
-        ref.read(testDataListProvider.notifier).state =
-            await database.seriesOfSkyIsland;
-        break;
-      case SERIES.WATERSEVEN:
-        ref.read(testDataListProvider.notifier).state =
-            await database.seriesOfWaterSeven;
-        break;
-      case SERIES.THRILLERBARK:
-        ref.read(testDataListProvider.notifier).state =
-            await database.seriesOfThrillerBark;
-        break;
-      case SERIES.IMPELDOWN:
-        ref.read(testDataListProvider.notifier).state =
-            await database.seriesOfImpelDown;
-        break;
-      case SERIES.FISHMANISLAND:
-        ref.read(testDataListProvider.notifier).state =
-            await database.seriesOfFishmanIsland;
-        break;
-      case SERIES.DRESSROSA:
-        ref.read(testDataListProvider.notifier).state =
-            await database.seriesOfDressRosa;
-        break;
-      case SERIES.WHOLECAKEISLAND:
-        ref.read(testDataListProvider.notifier).state =
-            await database.seriesOfWholeCakeIsland;
-        break;
-      case SERIES.WANOKUNI:
-        ref.read(testDataListProvider.notifier).state =
-            await database.seriesOfWaNoKuni;
-        break;
-    }
-    ref.read(testDataListProvider.notifier).state.shuffle();
-    ref.read(testStatusProvider.notifier).state = TestStatus.BEFORE_START;
-    ref.read(questionIndexProvider.notifier).state = 0;
-    ref.read(qCardVisibleProvider.notifier).state = false;
-    ref.read(maruOrBatuProvider.notifier).state = false;
-    ref.read(isFabVisibleProvider.notifier).state = true;
-    ref.read(numberOfQuestionProvider.notifier).state =
-        ref.watch(testDataListProvider).length;
-  }
-
-  _refreshAnswerList() async {
+  refreshAnswerList() async {
     ref.read(answersListProvider.notifier).state = [];
-    ref.read(answersListProvider.notifier).addAnswer(currentWord.strAnswer);
-    ref.read(answersListProvider.notifier).addAnswer(currentWord.fakeFirst);
-    ref.read(answersListProvider.notifier).addAnswer(currentWord.fakeSecond);
+    ref.read(answersListProvider.notifier).addAnswer(_mainViewModel.currentWord.strAnswer);
+    ref.read(answersListProvider.notifier).addAnswer(_mainViewModel.currentWord.fakeFirst);
+    ref.read(answersListProvider.notifier).addAnswer(_mainViewModel.currentWord.fakeSecond);
     ref.read(answersListProvider.notifier).state.shuffle();
-  }
-
-  void _checkAnswer(String selectedAnswer, String correctAnswer) async {
-    ref.read(testStatusProvider.notifier).state = TestStatus.SHOW_ANSWER;
-    ref.read(qCardVisibleProvider.notifier).state = true;
-    ref.read(maruOrBatuProvider.notifier).state = true;
-    ref.read(isFabVisibleProvider.notifier).state = false;
-    ref.read(isAbleToPressProvider.notifier).state = false;
-    if (selectedAnswer == correctAnswer) {
-      ref.read(selectedACorrectProvider.notifier).state = true;
-      ref.read(maruOrBatuProvider.notifier).state = true;
-      await _audioPlayer.setAsset("assets/sounds/sound_correct.mp3");
-      _audioPlayer.play();
-      await Future.delayed(Duration(seconds: 2));
-      ref.read(adCountProvider.notifier).state--;
-      if (ref.watch(adCountProvider) <= 0) {
-        _loadInterstitialAd();
-        ref.read(adCountProvider.notifier).state = 5;
-      }
-      if (ref.watch(numberOfQuestionProvider) <= 0) {
-        ref.read(isFabVisibleProvider.notifier).state = false;
-        ref.read(testStatusProvider.notifier).state = TestStatus.FINISHED;
-        ref.read(answersListProvider.notifier).state = [];
-      } else {
-        ref.read(testStatusProvider.notifier).state = TestStatus.SHOW_QUESTION;
-        ref.read(answersListProvider.notifier).state = [];
-        _showQuestion();
-      }
-    } else {
-      ref.read(selectedACorrectProvider.notifier).state = false;
-      ref.read(maruOrBatuProvider.notifier).state = true;
-      await _audioPlayer.setAsset("assets/sounds/sound_incorrect.mp3");
-      _audioPlayer.play();
-      await Future.delayed(Duration(seconds: 2));
-      ref.read(adCountProvider.notifier).state--;
-      if (ref.watch(adCountProvider) <= 0) {
-        _loadInterstitialAd();
-        ref.read(adCountProvider.notifier).state = 5;
-      }
-      if (ref.watch(numberOfQuestionProvider) <= 0) {
-        ref.read(isFabVisibleProvider.notifier).state = false;
-        ref.read(answersListProvider.notifier).state = [];
-        ref.read(testStatusProvider.notifier).state = TestStatus.FINISHED;
-      } else {
-        ref.read(testStatusProvider.notifier).state = TestStatus.SHOW_QUESTION;
-        ref.read(answersListProvider.notifier).state = [];
-        _showQuestion();
-      }
-    }
-  }
-
-  void _initBannerAd() {
-    bannerAd = BannerAd(
-      size: AdSize.banner,
-      adUnitId: AdManager.bannerAdUnitId,
-      listener: BannerAdListener(),
-      request: AdRequest(),
-    );
-  }
-
-  void _initInterstitialAd() {
-    InterstitialAd.load(
-      adUnitId: AdManager.interstitialAdUnitId,
-      request: AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (InterstitialAd ad) {
-          interstitialAd = ad;
-          ref.read(interstitialNumProvider.notifier).state = 0;
-        },
-        onAdFailedToLoad: (LoadAdError error) {
-          interstitialAd = null;
-          ref.read(interstitialNumProvider.notifier).state++;
-          if (ref.watch(interstitialNumProvider) <= 3) _initInterstitialAd();
-        },
-      ),
-    );
-  }
-
-  void _loadInterstitialAd() {
-    if (interstitialAd == null) return;
-    interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-        onAdDismissedFullScreenContent: (InterstitialAd ad) {
-      ad.dispose();
-      _initInterstitialAd();
-    }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-      ad.dispose();
-      _initInterstitialAd();
-    });
-    interstitialAd!.show();
-    interstitialAd = null;
-  }
-
-  void _loadBannerAd() {
-    bannerAd?.load();
-  }
-
-  Widget adPart(BannerAd? bannerAd) {
-    return Positioned(
-      left: 20,
-      right: 20,
-      bottom: 8,
-      child: (bannerAd == null)
-          ? Container(width: 0, height: 0)
-          : Container(
-              width: bannerAd.size.width.toDouble(),
-              height: bannerAd.size.height.toDouble(),
-              child: AdWidget(ad: bannerAd),
-            ),
-    );
   }
 }

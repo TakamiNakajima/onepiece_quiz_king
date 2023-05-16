@@ -12,8 +12,8 @@ late MyDatabase database;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
-  var dbPath = await getDbPath();
+  MobileAds.instance.initialize();  //Admob初期化
+  var dbPath = await getDbPath();  //SQLiteDB
   database = MyDatabase(dbPath: dbPath);
   runApp(ProviderScope(child: MyApp()));
 }
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
-      title: "麦わらクイズ",
+      title: "麦わらQ",
       theme: CupertinoThemeData(
         textTheme: CupertinoTextThemeData(textStyle: TextStyle(fontSize: 18),
         ),

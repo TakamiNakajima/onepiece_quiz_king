@@ -16,4 +16,9 @@ class TodosNotifier extends StateNotifier<List<String>> {
   void clearList() {
     state = [];
   }
+
+  //シャッフル
+  void shuffleList() {
+    state.shuffle();
+  }
 }

@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onepiece_quiz_king/const/const.dart';
+import 'package:onepiece_quiz_king/providers/bool/q_card_visible_provider.dart';
+import 'package:onepiece_quiz_king/providers/string/question_txt_provider.dart';
+import 'package:onepiece_quiz_king/view_model/main_view_model.dart';
 import 'package:onepiece_quiz_king/views/components/texts/question_level_text.dart';
 
-class QuestionCardPart extends StatefulWidget {
-  late bool isQuestionCardVisible;
-  late String txtQuestion;
-  late int level;
-  QuestionCardPart(
-      {required this.isQuestionCardVisible,
-      required this.txtQuestion,
-      required this.level,
-      });
+class QuestionCardPart extends ConsumerWidget {
+  MainViewModel _mainViewModel = MainViewModel();
 
   @override
-  State<QuestionCardPart> createState() => _QuestionCardPartState();
-}
-
-class _QuestionCardPartState extends State<QuestionCardPart> {
-  @override
-  Widget build(BuildContext context) {
-    if (widget.isQuestionCardVisible) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isQCardVisible = ref.watch(qCardVisibleProvider);
+    final questionText = ref.watch(qTxtProvider);
+    if (isQCardVisible) {
       return Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: Card(
@@ -42,13 +36,13 @@ class _QuestionCardPartState extends State<QuestionCardPart> {
                     children: [
                       Container(
                         width: 310,
-                        child: Text(widget.txtQuestion,
+                        child: Text(questionText,
                             textAlign: TextAlign.left,
                             style: lanobeQuestionTextStyle),
                       ),
                     ],
                   ),
-                  QuestionLevelText(level: widget.level),
+                  QuestionLevelText(level: _mainViewModel.currentWord.level),
                 ],
               ),
             ),

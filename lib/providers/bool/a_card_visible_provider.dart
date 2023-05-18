@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final maruOrBatuProvider = StateProvider<bool>(
+final judgeImageProvider = StateProvider<bool>(
   (ref) => false,
 );

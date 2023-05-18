@@ -7,6 +7,7 @@ import 'package:onepiece_quiz_king/providers/bool/is_able_to_press_provider.dart
 import 'package:onepiece_quiz_king/providers/bool/is_fab_visible_provider.dart';
 import 'package:onepiece_quiz_king/providers/bool/q_card_visible_provider.dart';
 import 'package:onepiece_quiz_king/providers/bool/selected_a_correct_provider.dart';
+import 'package:onepiece_quiz_king/providers/current_series.dart';
 import 'package:onepiece_quiz_king/providers/int/ad_count_provider.dart';
 import 'package:onepiece_quiz_king/providers/int/interstitial_load_attempt_provider.dart';
 import 'package:onepiece_quiz_king/providers/int/number_of_question_provider.dart';
@@ -14,7 +15,7 @@ import 'package:onepiece_quiz_king/providers/int/q_index_provider.dart';
 import 'package:onepiece_quiz_king/providers/list/answer_list_provider.dart';
 import 'package:onepiece_quiz_king/providers/list/test_data_list_provider.dart';
 import 'package:onepiece_quiz_king/providers/string/question_txt_provider.dart';
-import 'package:onepiece_quiz_king/providers/test_status/test_status_provider.dart';
+import 'package:onepiece_quiz_king/providers/test_status_provider.dart';
 
 class MainViewModel {
   late AudioPlayer audioPlayer;
@@ -78,7 +79,7 @@ class MainViewModel {
     ref.read(testStatusProvider.notifier).state = TestStatus.BEFORE_START;
     ref.read(questionIndexProvider.notifier).state = 0;
     ref.read(qCardVisibleProvider.notifier).state = false;
-    ref.read(maruOrBatuProvider.notifier).state = false;
+    ref.read(judgeImageProvider.notifier).state = false;
     ref.read(isFabVisibleProvider.notifier).state = true;
     ref.read(numberOfQuestionProvider.notifier).state =
         ref.watch(testDataListProvider).length;
@@ -86,7 +87,7 @@ class MainViewModel {
 
   void readAllProviders(ref) {
     ref.read(qCardVisibleProvider);
-    ref.read(maruOrBatuProvider);
+    ref.read(judgeImageProvider);
     ref.read(isFabVisibleProvider);
     ref.read(selectedACorrectProvider);
     ref.read(isAbleToPressProvider);
@@ -98,6 +99,7 @@ class MainViewModel {
     ref.read(answersListProvider);
     ref.read(testDataListProvider);
     ref.read(interstitialNumProvider);
+    ref.read(currentSeriesProvider);
   }
 
 }

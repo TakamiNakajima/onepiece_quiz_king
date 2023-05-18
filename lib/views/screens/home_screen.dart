@@ -1,38 +1,38 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onepiece_quiz_king/const/const.dart';
-import 'package:onepiece_quiz_king/enum/enum.dart';
-import 'package:onepiece_quiz_king/models/manager/ad_manager.dart';
-import 'package:onepiece_quiz_king/views/components/texts/selected_series_text.dart';
-import 'package:onepiece_quiz_king/views/components/texts/title_text.dart';
-import 'package:onepiece_quiz_king/views/screens/test_screen.dart';
+import 'package:onepiece_quiz_king/view_model/ad_view_model.dart';
+import 'package:onepiece_quiz_king/view_model/main_view_model.dart';
+import 'package:onepiece_quiz_king/views/components/ad_part.dart';
+import 'package:onepiece_quiz_king/views/components/buttons/drop_down_button.dart';
+import 'package:onepiece_quiz_king/views/components/buttons/start_button.dart';
+import 'package:onepiece_quiz_king/views/components/top_image_and_title.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  FooWidgetState createState() => FooWidgetState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  bool isIncludedMemorizedWords = false;
-  SERIES _selectedSeries = SERIES.ALL;
-  BannerAd? bannerAd;
-  InterstitialAd? interstitialAd;
-  int _numInterstitialLoadAttempt = 0;
+class FooWidgetState extends ConsumerState<HomeScreen> {
+  MainViewModel _mainViewModel = MainViewModel();
+  AdViewModel _adViewModel = AdViewModel();
 
   @override
   void initState() {
     super.initState();
-    _loadBannerAd();
-    _initBannerAd();
-    _initInterstitialAd();
+    _adViewModel.initBannerAd();
+    _adViewModel.initInterstitialAd(ref);
+    _adViewModel.loadBannerAd();
+    _mainViewModel.readAllProviders(ref);
+    _mainViewModel.readAllProviders(ref);
   }
 
   @override
   void dispose() {
     super.dispose();
-    bannerAd?.dispose();
-    interstitialAd?.dispose();
+    _adViewModel.bannerAd?.dispose();
+    _adViewModel.interstitialAd?.dispose();
   }
 
   @override
@@ -50,141 +50,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Container(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            "assets/images/image_hat.png",
-                            width: 280,
-                          ),
-                          SizedBox(height: 40),
-                          const TitleText(),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 44,
-                      width: MediaQuery.of(context).size.width *  7/10,
-                      child: ElevatedButton(
-                        onPressed: () => showCupertinoModalPopup(
-                          context: context,
-                          builder: (_) => SizedBox(
-                            width: double.infinity,
-                            height: 300,
-                            child: CupertinoPicker(
-                              backgroundColor: Colors.white,
-                              itemExtent: 40,
-                              scrollController: FixedExtentScrollController(
-                                initialItem: 1,
-                              ),
-                              children: DropDownItemList,
-                              onSelectedItemChanged: (int value) {
-                                if (DropDownItemList[value].value != null) {
-                                  setState(
-                                    () {
-                                      _selectedSeries = DropDownItemList[value].value;
-                                    },
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                        ),
-                        child: SelectedSeriesText(selectedSeries: _selectedSeries),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: subColor,
-                        ),
-                      ),
-                    ),
-                    //スタートボタン
-                    SizedBox(
-                      width: 280,
-                      height: 54,
-                      child: TextButton(
-                        onPressed: () {
-                          _loadInterstitialAd();
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) =>
-                                  TestScreen(series: _selectedSeries),
-                            ),
-                          );
-                        },
-                        child: Text("はじめる", style: lanobeMediumTextStyle),
-                        style: TextButton.styleFrom(
-                          backgroundColor: mainColor,
-                        ),
-                      ),
-                    ),
+                    TopImageAndTitle(),
+                    DropDownButton(),
+                    StartButton(),
                   ],
                 ),
               ),
-              adPart(bannerAd),
+              AdPart(bannerAd: _adViewModel.bannerAd),
             ],
           ),
         ),
       ),
     );
   }
-
-  void _initBannerAd() {
-    bannerAd?.load();
-  }
-
-  void _initInterstitialAd() {
-    InterstitialAd.load(
-      adUnitId: AdManager.interstitialAdUnitId,
-      request: AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (InterstitialAd ad) {
-          interstitialAd = ad;
-          _numInterstitialLoadAttempt = 0;
-        },
-        onAdFailedToLoad: (LoadAdError error) {
-          interstitialAd = null;
-          _numInterstitialLoadAttempt++;
-          if (_numInterstitialLoadAttempt <= 3) _initInterstitialAd();
-        },
-      ),
-    );
-  }
-
-  Widget adPart(BannerAd? bannerAd) {
-    return Positioned(
-      left: 20,
-      right: 20,
-      bottom: 8,
-      child: (bannerAd == null)
-          ? Container(width: 0, height: 0)
-          : Container(
-              width: bannerAd.size.width.toDouble(),
-              height: bannerAd.size.height.toDouble(),
-              child: AdWidget(ad: bannerAd),
-            ),
-    );
-  }
-
-  void _loadBannerAd() {
-    bannerAd = BannerAd(
-      size: AdSize.banner,
-      adUnitId: AdManager.bannerAdUnitId,
-      listener: BannerAdListener(),
-      request: AdRequest(),
-    );
-  }
-
-  void _loadInterstitialAd() {
-    if (interstitialAd == null) return;
-    interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-        onAdDismissedFullScreenContent: (InterstitialAd ad) {
-      ad.dispose();
-      _initInterstitialAd();
-    }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-      ad.dispose();
-      _initInterstitialAd();
-    });
-    interstitialAd!.show();
-    interstitialAd = null;
-  }
 }
+
+
+

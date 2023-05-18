@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:onepiece_quiz_king/providers/bool/is_fab_visible_provider.dart';
+import 'package:onepiece_quiz_king/providers/list/test_data_list_provider.dart';
 
-class GoNextButton extends StatelessWidget {
-  final bool isFabVisible;
-  final List testDataList;
-  final onPressed;
-
-  GoNextButton(
-      {required this.isFabVisible,
-      required this.testDataList,
-      required this.onPressed});
+class GoNextButton extends ConsumerWidget {
+  final VoidCallback onPressed;
+  GoNextButton(this.onPressed);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final testDataList = ref.watch(testDataListProvider);
+    final isFabVisible = ref.watch(isFabVisibleProvider);
     return (isFabVisible && testDataList.isNotEmpty)
         ? Positioned(
             right: 30,

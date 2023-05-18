@@ -21,7 +21,6 @@ void main() async {
 Future<String> getDbPath() async {
   var dbDir = await getApplicationDocumentsDirectory();
   var dbPath = join(dbDir.path, "words2.db");
-
   ByteData byteData = await rootBundle.load("assets/db/words2.db");
   List<int> bytes = byteData.buffer
       .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);

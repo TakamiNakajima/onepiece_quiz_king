@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onepiece_quiz_king/const/const.dart';
 import 'package:onepiece_quiz_king/db/database.dart';
 
-class CorrectedImageAndAnswer extends StatelessWidget {
+class CorrectedImageAndAnswer extends ConsumerWidget {
   final bool isCorrected;
   final Word currentWord;
 
   CorrectedImageAndAnswer({required this.isCorrected, required this.currentWord});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Stack(
       children: [
         Container(

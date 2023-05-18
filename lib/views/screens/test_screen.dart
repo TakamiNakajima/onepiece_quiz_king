@@ -14,19 +14,22 @@ import 'package:onepiece_quiz_king/providers/int/q_index_provider.dart';
 import 'package:onepiece_quiz_king/providers/list/answer_list_provider.dart';
 import 'package:onepiece_quiz_king/providers/list/test_data_list_provider.dart';
 import 'package:onepiece_quiz_king/providers/string/question_txt_provider.dart';
-import 'package:onepiece_quiz_king/providers/test_status/test_status_provider.dart';
+import 'package:onepiece_quiz_king/providers/test_status_provider.dart';
 import 'package:onepiece_quiz_king/view_model/ad_view_model.dart';
 import 'package:onepiece_quiz_king/view_model/main_view_model.dart';
+import 'package:onepiece_quiz_king/views/components/ad_part.dart';
 import 'package:onepiece_quiz_king/views/components/buttons/go_next_button.dart';
 import 'package:onepiece_quiz_king/views/components/end_message.dart';
+import 'package:onepiece_quiz_king/views/components/list_item.dart';
 import 'package:onepiece_quiz_king/views/components/number_of_question_part.dart';
 import 'package:onepiece_quiz_king/views/components/question_card_part.dart';
 import 'package:onepiece_quiz_king/views/components/texts/testscreen_title_text.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:onepiece_quiz_king/views/components/corrected_Image_and_answer.dart';
+import 'package:onepiece_quiz_king/views/components/judge_Image_and_answer.dart';
 
 class TestScreen extends ConsumerStatefulWidget {
   SERIES series;
+
   TestScreen({required this.series});
 
   @override
@@ -40,10 +43,9 @@ class TestScreenState extends ConsumerState<TestScreen> {
   @override
   void initState() {
     super.initState();
-    _mainViewModel.getTestData(ref, widget.series);
-    // _initBannerAd();
+    _adViewModel.initBannerAd();
     _adViewModel.initInterstitialAd(ref);
-    // _adViewModel.loadBannerAd();
+    _adViewModel.loadBannerAd();
     _mainViewModel.readAllProviders(ref);
     _mainViewModel.audioPlayer = AudioPlayer();
   }
@@ -59,23 +61,15 @@ class TestScreenState extends ConsumerState<TestScreen> {
   @override
   Widget build(BuildContext context) {
     final isQCardVisible = ref.watch(qCardVisibleProvider);
-    final maruOrBatuVisible = ref.watch(maruOrBatuProvider);
-    final isFabVisible = ref.watch(isFabVisibleProvider);
+    final judgeImageVisible = ref.watch(judgeImageProvider);
     final selectedACorrect = ref.watch(selectedACorrectProvider);
-    final ableToPress = ref.watch(isAbleToPressProvider);
-    final questionText = ref.watch(qTxtProvider);
-    final numberOfQ = ref.watch(numberOfQuestionProvider);
-    final testStatusP = ref.watch(testStatusProvider);
-    final answersListP = ref.watch(answersListProvider);
-    final testDataListP = ref.watch(testDataListProvider);
+    final answersList = ref.watch(answersListProvider);
     return CupertinoPageScaffold(
       backgroundColor: subColor,
       navigationBar: CupertinoNavigationBar(
         middle: TestScreenTitleText(series: widget.series),
         leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
+          onTap: () => Navigator.pop(context),
           child: Icon(Icons.arrow_back_ios_new_rounded, color: whiteColor),
         ),
         backgroundColor: mainColor,
@@ -87,86 +81,39 @@ class TestScreenState extends ConsumerState<TestScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(height: 20),
-              //のこり問題数表示部分
-              NumberOfQuestionPart(numberOfQuestion: numberOfQ),
+              NumberOfQuestionPart(),
               SizedBox(height: 20),
-              // 問題カード表示部分
-              QuestionCardPart(
-                isQuestionCardVisible: isQCardVisible,
-                txtQuestion: questionText,
-                level: _mainViewModel.currentWord.level,
-              ),
-              //選択肢カード表示部分
+              QuestionCardPart(),
+              SizedBox(height: 50),
               isQCardVisible
-                  ? Padding(
-                padding:
-                const EdgeInsets.only(top: 50.0, left: 20, right: 20),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: answersListP.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final item = answersListP[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Material(
-                        color: subColor,
-                        child: InkWell(
-                          onTap: () => ableToPress
-                              ? _checkAnswer(item, _mainViewModel.currentWord.strAnswer)
-                              : null,
-                          child: Card(
-                            elevation: 4,
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: redColor, width: 1.5),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        item,
-                                        style: lanobeAnswerTextStyle,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              )
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: answersList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final currentAnswer = _mainViewModel.currentWord.strAnswer;
+                        return ListItem(
+                          index: index,
+                          onTap: () => _checkAnswer(answersList[index], currentAnswer),
+                        );
+                      },
+                    )
                   : Container(),
               SizedBox(height: 40),
             ],
           ),
           //次へボタン
-          GoNextButton(
-            isFabVisible: isFabVisible,
-            testDataList: testDataListP,
-            onPressed: () => _goNextStatus(),
-          ),
+          GoNextButton(() => _goNextStatus()),
           //終了メッセージ
-          EndMessage(testStatus: testStatusP),
-          // AdPart(bannerAd: _adViewModel.bannerAd),
+          EndMessage(),
+          AdPart(bannerAd: _adViewModel.bannerAd),
           //正解のとき
-          maruOrBatuVisible && selectedACorrect
+          judgeImageVisible && selectedACorrect
               ? CorrectedImageAndAnswer(
                   isCorrected: true, currentWord: _mainViewModel.currentWord)
               : Container(),
           //不正解のとき
-          maruOrBatuVisible && !selectedACorrect
+          judgeImageVisible && !selectedACorrect
               ? CorrectedImageAndAnswer(
                   isCorrected: false, currentWord: _mainViewModel.currentWord)
               : Container(),
@@ -175,15 +122,16 @@ class TestScreenState extends ConsumerState<TestScreen> {
     );
   }
 
-  void _checkAnswer(String selectedAnswer, String correctAnswer) async {
+  _checkAnswer(String selectedAnswer, String correctAnswer) async {
     ref.read(testStatusProvider.notifier).state = TestStatus.SHOW_ANSWER;
     ref.read(qCardVisibleProvider.notifier).state = true;
-    ref.read(maruOrBatuProvider.notifier).state = true;
+    ref.read(judgeImageProvider.notifier).state = true;
     ref.read(isFabVisibleProvider.notifier).state = false;
     ref.read(isAbleToPressProvider.notifier).state = false;
+    //正解したとき
     if (selectedAnswer == correctAnswer) {
       ref.read(selectedACorrectProvider.notifier).state = true;
-      ref.read(maruOrBatuProvider.notifier).state = true;
+      ref.read(judgeImageProvider.notifier).state = true;
       await _mainViewModel.audioPlayer.setAsset("assets/sounds/sound_correct.mp3");
       _mainViewModel.audioPlayer.play();
       await Future.delayed(Duration(seconds: 2));
@@ -195,15 +143,16 @@ class TestScreenState extends ConsumerState<TestScreen> {
       if (ref.watch(numberOfQuestionProvider) <= 0) {
         ref.read(isFabVisibleProvider.notifier).state = false;
         ref.read(testStatusProvider.notifier).state = TestStatus.FINISHED;
-        ref.read(answersListProvider.notifier).state = [];
+        ref.read(answersListProvider.notifier).clearList();
       } else {
         ref.read(testStatusProvider.notifier).state = TestStatus.SHOW_QUESTION;
-        ref.read(answersListProvider.notifier).state = [];
+        ref.read(answersListProvider.notifier).clearList();
         _showQuestion();
       }
     } else {
+      //不正解のとき
       ref.read(selectedACorrectProvider.notifier).state = false;
-      ref.read(maruOrBatuProvider.notifier).state = true;
+      ref.read(judgeImageProvider.notifier).state = true;
       await _mainViewModel.audioPlayer.setAsset("assets/sounds/sound_incorrect.mp3");
       _mainViewModel.audioPlayer.play();
       await Future.delayed(Duration(seconds: 2));
@@ -214,11 +163,11 @@ class TestScreenState extends ConsumerState<TestScreen> {
       }
       if (ref.watch(numberOfQuestionProvider) <= 0) {
         ref.read(isFabVisibleProvider.notifier).state = false;
-        ref.read(answersListProvider.notifier).state = [];
+        ref.read(answersListProvider.notifier).clearList();
         ref.read(testStatusProvider.notifier).state = TestStatus.FINISHED;
       } else {
         ref.read(testStatusProvider.notifier).state = TestStatus.SHOW_QUESTION;
-        ref.read(answersListProvider.notifier).state = [];
+        ref.read(answersListProvider.notifier).clearList();
         _showQuestion();
       }
     }
@@ -237,11 +186,10 @@ class TestScreenState extends ConsumerState<TestScreen> {
           ref.read(selectedACorrectProvider.notifier).state = false;
           ref.read(isFabVisibleProvider.notifier).state = false;
           ref.read(testStatusProvider.notifier).state = TestStatus.FINISHED;
-          ref.read(answersListProvider.notifier).state = [];
+          ref.read(answersListProvider.notifier).clearList();
         } else {
-          ref.read(testStatusProvider.notifier).state =
-              TestStatus.SHOW_QUESTION;
-          ref.read(answersListProvider.notifier).state = [];
+          ref.read(testStatusProvider.notifier).state = TestStatus.SHOW_QUESTION;
+          ref.read(answersListProvider.notifier).clearList();
           _showQuestion();
         }
         break;
@@ -250,11 +198,11 @@ class TestScreenState extends ConsumerState<TestScreen> {
     }
   }
 
-  void _showQuestion() async {
+  _showQuestion() async {
     _mainViewModel.currentWord = ref.watch(testDataListProvider)[ref.watch(questionIndexProvider)];
-    await refreshAnswerList();
+    await _refreshSelectableList();
     ref.read(qCardVisibleProvider.notifier).state = true;
-    ref.read(maruOrBatuProvider.notifier).state = false;
+    ref.read(judgeImageProvider.notifier).state = false;
     ref.read(isFabVisibleProvider.notifier).state = false;
     ref.read(isAbleToPressProvider.notifier).state = true;
     ref.read(qTxtProvider.notifier).state = _mainViewModel.currentWord.strQuestion;
@@ -262,11 +210,11 @@ class TestScreenState extends ConsumerState<TestScreen> {
     ref.read(questionIndexProvider.notifier).state += 1;
   }
 
-  refreshAnswerList() async {
-    ref.read(answersListProvider.notifier).state = [];
+  _refreshSelectableList() async {
+    ref.read(answersListProvider.notifier).clearList();
     ref.read(answersListProvider.notifier).addAnswer(_mainViewModel.currentWord.strAnswer);
     ref.read(answersListProvider.notifier).addAnswer(_mainViewModel.currentWord.fakeFirst);
     ref.read(answersListProvider.notifier).addAnswer(_mainViewModel.currentWord.fakeSecond);
-    ref.read(answersListProvider.notifier).state.shuffle();
+    ref.read(answersListProvider.notifier).shuffleList();
   }
 }

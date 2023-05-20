@@ -3,34 +3,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onepiece_quiz_king/const/const.dart';
 import 'package:onepiece_quiz_king/enum/enum.dart';
-import 'package:onepiece_quiz_king/providers/bool/a_card_visible_provider.dart';
-import 'package:onepiece_quiz_king/providers/bool/is_able_to_press_provider.dart';
-import 'package:onepiece_quiz_king/providers/bool/is_fab_visible_provider.dart';
-import 'package:onepiece_quiz_king/providers/bool/q_card_visible_provider.dart';
-import 'package:onepiece_quiz_king/providers/bool/selected_a_correct_provider.dart';
-import 'package:onepiece_quiz_king/providers/int/ad_count_provider.dart';
-import 'package:onepiece_quiz_king/providers/int/number_of_question_provider.dart';
-import 'package:onepiece_quiz_king/providers/int/q_index_provider.dart';
-import 'package:onepiece_quiz_king/providers/list/answer_list_provider.dart';
-import 'package:onepiece_quiz_king/providers/list/test_data_list_provider.dart';
-import 'package:onepiece_quiz_king/providers/string/question_txt_provider.dart';
-import 'package:onepiece_quiz_king/providers/test_status_provider.dart';
+import 'package:onepiece_quiz_king/provider/bool/a_card_visible_provider.dart';
+import 'package:onepiece_quiz_king/provider/bool/is_able_to_press_provider.dart';
+import 'package:onepiece_quiz_king/provider/bool/is_fab_visible_provider.dart';
+import 'package:onepiece_quiz_king/provider/bool/q_card_visible_provider.dart';
+import 'package:onepiece_quiz_king/provider/bool/selected_a_correct_provider.dart';
+import 'package:onepiece_quiz_king/provider/current_series.dart';
+import 'package:onepiece_quiz_king/provider/int/ad_count_provider.dart';
+import 'package:onepiece_quiz_king/provider/int/number_of_question_provider.dart';
+import 'package:onepiece_quiz_king/provider/int/q_index_provider.dart';
+import 'package:onepiece_quiz_king/provider/list/answer_list_provider.dart';
+import 'package:onepiece_quiz_king/provider/list/test_data_list_provider.dart';
+import 'package:onepiece_quiz_king/provider/string/question_txt_provider.dart';
+import 'package:onepiece_quiz_king/provider/test_status_provider.dart';
+import 'package:onepiece_quiz_king/view/components/ad_part.dart';
+import 'package:onepiece_quiz_king/view/components/buttons/go_next_button.dart';
+import 'package:onepiece_quiz_king/view/components/end_message.dart';
+import 'package:onepiece_quiz_king/view/components/judge_Image_and_answer.dart';
+import 'package:onepiece_quiz_king/view/components/list_item.dart';
+import 'package:onepiece_quiz_king/view/components/number_of_question_part.dart';
+import 'package:onepiece_quiz_king/view/components/question_card_part.dart';
+import 'package:onepiece_quiz_king/view/components/texts/testscreen_title_text.dart';
 import 'package:onepiece_quiz_king/view_model/ad_view_model.dart';
 import 'package:onepiece_quiz_king/view_model/main_view_model.dart';
-import 'package:onepiece_quiz_king/views/components/ad_part.dart';
-import 'package:onepiece_quiz_king/views/components/buttons/go_next_button.dart';
-import 'package:onepiece_quiz_king/views/components/end_message.dart';
-import 'package:onepiece_quiz_king/views/components/list_item.dart';
-import 'package:onepiece_quiz_king/views/components/number_of_question_part.dart';
-import 'package:onepiece_quiz_king/views/components/question_card_part.dart';
-import 'package:onepiece_quiz_king/views/components/texts/testscreen_title_text.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:onepiece_quiz_king/views/components/judge_Image_and_answer.dart';
 
 class TestScreen extends ConsumerStatefulWidget {
-  SERIES series;
-
-  TestScreen({required this.series});
 
   @override
   TestScreenState createState() => TestScreenState();
@@ -64,10 +62,11 @@ class TestScreenState extends ConsumerState<TestScreen> {
     final judgeImageVisible = ref.watch(judgeImageProvider);
     final selectedACorrect = ref.watch(selectedACorrectProvider);
     final answersList = ref.watch(answersListProvider);
+    final series = ref.watch(currentSeriesProvider);
     return CupertinoPageScaffold(
       backgroundColor: subColor,
       navigationBar: CupertinoNavigationBar(
-        middle: TestScreenTitleText(series: widget.series),
+        middle: TestScreenTitleText(series: series),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
           child: Icon(Icons.arrow_back_ios_new_rounded, color: whiteColor),

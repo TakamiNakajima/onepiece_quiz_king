@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onepiece_quiz_king/const/const.dart';
-import 'package:onepiece_quiz_king/providers/current_series.dart';
-import 'package:onepiece_quiz_king/views/components/texts/selected_series_text.dart';
+import 'package:onepiece_quiz_king/provider/current_series.dart';
+import 'package:onepiece_quiz_king/view/components/texts/selected_series_text.dart';
 
 class DropDownButton extends ConsumerWidget {
 

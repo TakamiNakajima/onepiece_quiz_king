@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:onepiece_quiz_king/db/database.dart';
-import 'package:onepiece_quiz_king/views/screens/home_screen.dart';
+import 'package:onepiece_quiz_king/view/screens/home_screen.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 

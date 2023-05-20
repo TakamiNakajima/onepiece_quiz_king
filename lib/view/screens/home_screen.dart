@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onepiece_quiz_king/const/const.dart';
+import 'package:onepiece_quiz_king/view/components/ad_part.dart';
+import 'package:onepiece_quiz_king/view/components/buttons/drop_down_button.dart';
+import 'package:onepiece_quiz_king/view/components/buttons/start_button.dart';
+import 'package:onepiece_quiz_king/view/components/top_image_and_title.dart';
 import 'package:onepiece_quiz_king/view_model/ad_view_model.dart';
 import 'package:onepiece_quiz_king/view_model/main_view_model.dart';
-import 'package:onepiece_quiz_king/views/components/ad_part.dart';
-import 'package:onepiece_quiz_king/views/components/buttons/drop_down_button.dart';
-import 'package:onepiece_quiz_king/views/components/buttons/start_button.dart';
-import 'package:onepiece_quiz_king/views/components/top_image_and_title.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   @override
@@ -15,8 +14,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class FooWidgetState extends ConsumerState<HomeScreen> {
-  MainViewModel _mainViewModel = MainViewModel();
-  AdViewModel _adViewModel = AdViewModel();
+  final MainViewModel _mainViewModel = MainViewModel();
+  final AdViewModel _adViewModel = AdViewModel();
 
   @override
   void initState() {

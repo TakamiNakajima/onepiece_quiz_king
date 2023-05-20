@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onepiece_quiz_king/const/const.dart';
 import 'package:onepiece_quiz_king/enum/enum.dart';
-import 'package:onepiece_quiz_king/providers/test_status_provider.dart';
+import 'package:onepiece_quiz_king/provider/test_status_provider.dart';
 
 class EndMessage extends ConsumerWidget {
 

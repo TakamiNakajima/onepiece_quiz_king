@@ -1,6 +1,6 @@
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:onepiece_quiz_king/models/manager/ad_manager.dart';
-import 'package:onepiece_quiz_king/providers/int/interstitial_load_attempt_provider.dart';
+import 'package:onepiece_quiz_king/model/manager/ad_manager.dart';
+import 'package:onepiece_quiz_king/provider/int/interstitial_load_attempt_provider.dart';
 
 class AdViewModel {
   InterstitialAd? interstitialAd;

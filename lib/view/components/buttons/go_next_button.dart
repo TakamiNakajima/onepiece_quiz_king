@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:onepiece_quiz_king/providers/bool/is_fab_visible_provider.dart';
-import 'package:onepiece_quiz_king/providers/list/test_data_list_provider.dart';
+import 'package:onepiece_quiz_king/provider/bool/is_fab_visible_provider.dart';
+import 'package:onepiece_quiz_king/provider/list/test_data_list_provider.dart';
 
 class GoNextButton extends ConsumerWidget {
   final VoidCallback onPressed;

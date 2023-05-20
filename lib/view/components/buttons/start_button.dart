@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onepiece_quiz_king/const/const.dart';
-import 'package:onepiece_quiz_king/providers/current_series.dart';
+import 'package:onepiece_quiz_king/provider/current_series.dart';
+import 'package:onepiece_quiz_king/view/screens/test_screen.dart';
 import 'package:onepiece_quiz_king/view_model/ad_view_model.dart';
 import 'package:onepiece_quiz_king/view_model/main_view_model.dart';
-import 'package:onepiece_quiz_king/views/screens/test_screen.dart';
 
 class StartButton extends ConsumerWidget {
-  AdViewModel _adViewModel = AdViewModel();
-  MainViewModel _mainViewModel = MainViewModel();
+  final AdViewModel _adViewModel = AdViewModel();
+  final MainViewModel _mainViewModel = MainViewModel();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,7 +24,7 @@ class StartButton extends ConsumerWidget {
           Navigator.push(
             context,
             CupertinoPageRoute(
-              builder: (context) => TestScreen(series: series),
+              builder: (context) => TestScreen(),
             ),
           );
         },

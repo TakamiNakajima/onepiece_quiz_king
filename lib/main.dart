@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:onepiece_quiz_king/db/database.dart';
-import 'package:onepiece_quiz_king/view/screens/home_screen.dart';
+import 'package:onepiece_quiz_king/dao/database.dart';
+import 'package:onepiece_quiz_king/widgets/pages/home_page.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         textTheme: CupertinoTextThemeData(textStyle: TextStyle(fontSize: 18),
         ),
       ),
-      home: HomeScreen(),
+      home: HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }

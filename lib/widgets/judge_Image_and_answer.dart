@@ -25,7 +25,7 @@ class CorrectedImageAndAnswer extends ConsumerWidget {
               isCorrected
                   ? Image.asset("assets/images/pic_correct.png")
                   : Image.asset("assets/images/pic_incorrect.png"),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Wrap(
                 children: [
                   Padding(

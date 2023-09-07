@@ -17,8 +17,8 @@ class GoNextButton extends ConsumerWidget {
             bottom: 70,
             child: FloatingActionButton(
               onPressed: onPressed,
-              child: Icon(Icons.skip_next),
-              backgroundColor: Color(0xff733917),
+              child: const Icon(Icons.skip_next),
+              backgroundColor: const Color(0xff733917),
             ),
           )
         : Container();

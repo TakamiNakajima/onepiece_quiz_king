@@ -29,7 +29,7 @@ class StartButton extends ConsumerWidget {
             ),
           );
         },
-        child: Text("はじめる", style: lanobeMediumTextStyle),
+        child: const Text("はじめる", style: lanobeMediumTextStyle),
         style: TextButton.styleFrom(
           backgroundColor: mainColor,
         ),

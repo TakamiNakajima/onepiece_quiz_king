@@ -7,7 +7,7 @@ part 'database.g.dart';
 class Words extends Table {
   TextColumn get strQuestion => text()();
   TextColumn get strAnswer => text()();
-  BoolColumn get isMemorized => boolean().withDefault(Constant(false))();
+  BoolColumn get isMemorized => boolean().withDefault(const Constant(false))();
   IntColumn get series => integer()();
   IntColumn get level => integer()();
   TextColumn get fakeFirst => text()();

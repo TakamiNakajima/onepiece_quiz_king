@@ -10,7 +10,7 @@ class EndMessage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final testStatus = ref.watch(testStatusProvider);
     if (testStatus == TestStatus.FINISHED) {
-      return Center(
+      return const Center(
           child: Text("クイズ終了", style: lanobeFinishTextStyle));
     } else {
       return Container();

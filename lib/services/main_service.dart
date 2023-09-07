@@ -3,7 +3,7 @@ import 'package:onepiece_quiz_king/dao/database.dart';
 
 class MainService {
 
-  late Word currentWord = Word(
+  late Word currentWord = const Word(
     strQuestion: "",
     strAnswer: "",
     isMemorized: false,

@@ -12,7 +12,7 @@ class TopImageAndTitle extends StatelessWidget {
             "assets/images/image_hat.png",
             width: 280,
           ),
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
           const Text("麦わらクイズ", style: lanobeLargeTitleTextStyle),
         ],
       ),

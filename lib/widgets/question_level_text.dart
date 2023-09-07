@@ -17,7 +17,7 @@ class QuestionLevelText extends StatelessWidget {
     } else if (level == 4) {
       return _testLevelText("レベル：4");
     } else {
-      return Text("");
+      return const Text("");
     }
   }
 

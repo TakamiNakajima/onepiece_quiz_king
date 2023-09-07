@@ -69,7 +69,7 @@ class TestScreenState extends ConsumerState<QuizPage> {
         middle: TestScreenTitleText(series: series),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: Icon(Icons.arrow_back_ios_new_rounded, color: whiteColor),
+          child: const Icon(Icons.arrow_back_ios_new_rounded, color: whiteColor),
         ),
         backgroundColor: mainColor,
       ),
@@ -79,15 +79,15 @@ class TestScreenState extends ConsumerState<QuizPage> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               NumberOfQuestionPart(),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               QuestionCardPart(),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               isQCardVisible
                   ? ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: answersList.length,
                       itemBuilder: (BuildContext context, int index) {
                         final currentAnswer = _mainViewModel.currentWord.strAnswer;
@@ -98,7 +98,7 @@ class TestScreenState extends ConsumerState<QuizPage> {
                       },
                     )
                   : Container(),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
             ],
           ),
           //次へボタン
@@ -133,7 +133,7 @@ class TestScreenState extends ConsumerState<QuizPage> {
       ref.read(judgeImageProvider.notifier).state = true;
       await _mainViewModel.audioPlayer.setAsset("assets/sounds/sound_correct.mp3");
       _mainViewModel.audioPlayer.play();
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
       ref.read(adCountProvider.notifier).state--;
       if (ref.watch(adCountProvider) <= 0) {
         _adViewModel.loadInterstitialAd(ref);
@@ -154,7 +154,7 @@ class TestScreenState extends ConsumerState<QuizPage> {
       ref.read(judgeImageProvider.notifier).state = true;
       await _mainViewModel.audioPlayer.setAsset("assets/sounds/sound_incorrect.mp3");
       _mainViewModel.audioPlayer.play();
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
       ref.read(adCountProvider.notifier).state--;
       if (ref.watch(adCountProvider) <= 0) {
         _adViewModel.loadInterstitialAd(ref);

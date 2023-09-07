@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoApp(
       title: "麦わらQ",
-      theme: CupertinoThemeData(
+      theme: const CupertinoThemeData(
         textTheme: CupertinoTextThemeData(textStyle: TextStyle(fontSize: 18),
         ),
       ),

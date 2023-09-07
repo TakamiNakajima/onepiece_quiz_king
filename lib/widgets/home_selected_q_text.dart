@@ -15,7 +15,7 @@ class SelectedQText extends StatelessWidget {
         Center(
           child: Text(text, style: montMediumTextStyle),
         ),
-        Icon(Icons.arrow_drop_down_rounded, color: mainColor),
+        const Icon(Icons.arrow_drop_down_rounded, color: mainColor),
       ],
     );
   }

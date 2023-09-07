@@ -23,7 +23,7 @@ class AdViewModel {
   void initInterstitialAd(ref) {
     InterstitialAd.load(
       adUnitId: AdManager.interstitialAdUnitId,
-      request: AdRequest(),
+      request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
           interstitialAd = ad;
@@ -46,8 +46,8 @@ class AdViewModel {
     bannerAd = BannerAd(
       size: AdSize.banner,
       adUnitId: AdManager.bannerAdUnitId,
-      listener: BannerAdListener(),
-      request: AdRequest(),
+      listener: const BannerAdListener(),
+      request: const AdRequest(),
     );
   }
 }

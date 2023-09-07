@@ -12,8 +12,8 @@ class NumberOfQuestionPart extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("残り", style: montNumberOfQSmallTextStyle),
-        SizedBox(width: 8),
+        const Text("残り", style: montNumberOfQSmallTextStyle),
+        const SizedBox(width: 8),
         Text("${numberOfQ.toString()}問",
             style: lanobeNumberOfQLargeTextStyle),
       ],

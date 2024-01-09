@@ -63,31 +63,33 @@ class TestScreenState extends ConsumerState<QuizPage> {
       ),
       child: Stack(
         children: [
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              NumberOfQuestionPart(),
-              const SizedBox(height: 20),
-              QuestionCardPart(),
-              const SizedBox(height: 50),
-              isQCardVisible
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: answersList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final currentAnswer = _mainViewModel.currentWord.strAnswer;
-                        return ListItem(
-                          index: index,
-                          onTap: () => _checkAnswer(answersList[index], currentAnswer),
-                        );
-                      },
-                    )
-                  : Container(),
-              const SizedBox(height: 40),
-            ],
+          SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                NumberOfQuestionPart(),
+                const SizedBox(height: 20),
+                QuestionCardPart(),
+                const SizedBox(height: 50),
+                (isQCardVisible)
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: answersList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final currentAnswer = _mainViewModel.currentWord.strAnswer;
+                          return ListItem(
+                            index: index,
+                            onTap: () => _checkAnswer(answersList[index], currentAnswer),
+                          );
+                        },
+                      )
+                    : Container(),
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
           //次へボタン
           GoNextButton(() => _goNextStatus()),

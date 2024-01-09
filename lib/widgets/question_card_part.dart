@@ -32,7 +32,10 @@ class QuestionCardPart extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Text(questionText, textAlign: TextAlign.left, style: lanobeQuestionTextStyle),
+                    child: Container(
+                      width: double.infinity,
+                      child: Text(questionText, textAlign: TextAlign.left, style: lanobeQuestionTextStyle),
+                    ),
                   ),
                   QuestionLevelText(level: _mainViewModel.currentWord.level),
                 ],

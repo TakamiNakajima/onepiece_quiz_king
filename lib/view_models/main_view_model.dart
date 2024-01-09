@@ -1,20 +1,7 @@
 import 'package:just_audio/just_audio.dart';
 import 'package:onepiece_quiz_king/dao/database.dart';
 import 'package:onepiece_quiz_king/services/main_service.dart';
-import 'package:onepiece_quiz_king/states/a_card_visible_provider.dart';
-import 'package:onepiece_quiz_king/states/ad_count_provider.dart';
-import 'package:onepiece_quiz_king/states/answer_list_provider.dart';
-import 'package:onepiece_quiz_king/states/current_series.dart';
-import 'package:onepiece_quiz_king/states/interstitial_load_attempt_provider.dart';
-import 'package:onepiece_quiz_king/states/is_able_to_press_provider.dart';
-import 'package:onepiece_quiz_king/states/is_fab_visible_provider.dart';
-import 'package:onepiece_quiz_king/states/number_of_question_provider.dart';
-import 'package:onepiece_quiz_king/states/q_card_visible_provider.dart';
-import 'package:onepiece_quiz_king/states/q_index_provider.dart';
-import 'package:onepiece_quiz_king/states/question_txt_provider.dart';
-import 'package:onepiece_quiz_king/states/selected_a_correct_provider.dart';
-import 'package:onepiece_quiz_king/states/test_data_list_provider.dart';
-import 'package:onepiece_quiz_king/states/test_status_provider.dart';
+import 'package:onepiece_quiz_king/states/providers.dart';
 import 'package:onepiece_quiz_king/utils/enum.dart';
 import 'package:onepiece_quiz_king/main.dart';
 

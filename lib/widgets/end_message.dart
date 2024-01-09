@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onepiece_quiz_king/config/app_text_style.dart';
-import 'package:onepiece_quiz_king/states/test_status_provider.dart';
+import 'package:onepiece_quiz_king/states/providers.dart';
 import 'package:onepiece_quiz_king/utils/enum.dart';
 
 class EndMessage extends ConsumerWidget {

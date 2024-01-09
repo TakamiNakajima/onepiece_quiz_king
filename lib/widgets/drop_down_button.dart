@@ -22,7 +22,7 @@ class DropDownButton extends ConsumerWidget {
             height: 300,
             child: CupertinoPicker(
               backgroundColor: Colors.white,
-              itemExtent: 40,
+              itemExtent: 36,
               scrollController: FixedExtentScrollController(
                 initialItem: 1,
               ),

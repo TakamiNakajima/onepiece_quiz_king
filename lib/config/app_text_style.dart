@@ -10,6 +10,6 @@ const lanobeAnswerTextStyle = TextStyle(fontSize: 16, fontFamily: Lanobe, color:
 const AnswerTextStyle = TextStyle(fontSize: 24, fontFamily: Lanobe, color: Colors.white);
 const lanobeFinishTextStyle = TextStyle(fontSize: 60, color: mainColor);
 const lanobeNumberOfQLargeTextStyle = TextStyle(fontSize: 20, fontFamily: Lanobe, color: Colors.black);
-const montMediumTextStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: Mont, color: mainColor);
+const montMediumTextStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: Mont, color: mainColor);
 const montNumberOfQSmallTextStyle = TextStyle(fontSize: 14, fontFamily: Mont, color: Colors.black);
 const montSmallTextStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w400, fontFamily: Mont);

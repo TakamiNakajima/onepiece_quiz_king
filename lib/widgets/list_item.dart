@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onepiece_quiz_king/config/app_colors.dart';
 import 'package:onepiece_quiz_king/config/app_text_style.dart';
-import 'package:onepiece_quiz_king/states/answer_list_provider.dart';
-import 'package:onepiece_quiz_king/states/is_able_to_press_provider.dart';
+import 'package:onepiece_quiz_king/states/providers.dart';
 
 class ListItem extends ConsumerWidget {
   final int index;

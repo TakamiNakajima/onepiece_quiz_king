@@ -2,19 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onepiece_quiz_king/config/app_colors.dart';
-import 'package:onepiece_quiz_king/states/a_card_visible_provider.dart';
-import 'package:onepiece_quiz_king/states/ad_count_provider.dart';
-import 'package:onepiece_quiz_king/states/answer_list_provider.dart';
-import 'package:onepiece_quiz_king/states/current_series.dart';
-import 'package:onepiece_quiz_king/states/is_able_to_press_provider.dart';
-import 'package:onepiece_quiz_king/states/is_fab_visible_provider.dart';
-import 'package:onepiece_quiz_king/states/number_of_question_provider.dart';
-import 'package:onepiece_quiz_king/states/q_card_visible_provider.dart';
-import 'package:onepiece_quiz_king/states/q_index_provider.dart';
-import 'package:onepiece_quiz_king/states/question_txt_provider.dart';
-import 'package:onepiece_quiz_king/states/selected_a_correct_provider.dart';
-import 'package:onepiece_quiz_king/states/test_data_list_provider.dart';
-import 'package:onepiece_quiz_king/states/test_status_provider.dart';
+import 'package:onepiece_quiz_king/states/providers.dart';
 import 'package:onepiece_quiz_king/utils/enum.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:onepiece_quiz_king/view_models/ad_view_model.dart';
@@ -75,31 +63,33 @@ class TestScreenState extends ConsumerState<QuizPage> {
       ),
       child: Stack(
         children: [
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              NumberOfQuestionPart(),
-              const SizedBox(height: 20),
-              QuestionCardPart(),
-              const SizedBox(height: 50),
-              isQCardVisible
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: answersList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final currentAnswer = _mainViewModel.currentWord.strAnswer;
-                        return ListItem(
-                          index: index,
-                          onTap: () => _checkAnswer(answersList[index], currentAnswer),
-                        );
-                      },
-                    )
-                  : Container(),
-              const SizedBox(height: 40),
-            ],
+          SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                NumberOfQuestionPart(),
+                const SizedBox(height: 20),
+                QuestionCardPart(),
+                const SizedBox(height: 50),
+                (isQCardVisible)
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: answersList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final currentAnswer = _mainViewModel.currentWord.strAnswer;
+                          return ListItem(
+                            index: index,
+                            onTap: () => _checkAnswer(answersList[index], currentAnswer),
+                          );
+                        },
+                      )
+                    : Container(),
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
           //次へボタン
           GoNextButton(() => _goNextStatus()),

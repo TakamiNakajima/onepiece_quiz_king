@@ -8,6 +8,7 @@ const List<DropdownMenuItem> DropDownItemList = [
       child: Text(
         "すべての問題",
         style: TextStyle(
+            fontSize: 18,
             color: Colors.black,
             fontFamily: "Mont",
             fontWeight: FontWeight.w700),
@@ -19,7 +20,7 @@ const List<DropdownMenuItem> DropDownItemList = [
       child: Center(
           child: Text("シリーズ別",
               style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 20,
                   color: Colors.black26,
                   fontFamily: "Mont",
                   fontWeight: FontWeight.w400))),
@@ -29,6 +30,7 @@ const List<DropdownMenuItem> DropDownItemList = [
       child: Center(
           child: Text("イーストブルー編",
               style: TextStyle(
+                  fontSize: 18,
                   color: Colors.black,
                   fontFamily: "Mont",
                   fontWeight: FontWeight.w700)))),
@@ -37,6 +39,7 @@ const List<DropdownMenuItem> DropDownItemList = [
       child: Center(
           child: Text("アラバスタ編",
               style: TextStyle(
+                  fontSize: 18,
                   color: Colors.black,
                   fontFamily: "Mont",
                   fontWeight: FontWeight.w700)))),
@@ -45,6 +48,7 @@ const List<DropdownMenuItem> DropDownItemList = [
       child: Center(
           child: Text("ジャヤ&空島編",
               style: TextStyle(
+                  fontSize: 18,
                   color: Colors.black,
                   fontFamily: "Mont",
                   fontWeight: FontWeight.w700)))),
@@ -53,6 +57,7 @@ const List<DropdownMenuItem> DropDownItemList = [
       child: Center(
           child: Text("ウォーターセブン&エニエスロビー編",
               style: TextStyle(
+                  fontSize: 18,
                   color: Colors.black,
                   fontFamily: "Mont",
                   fontWeight: FontWeight.w700)))),
@@ -61,6 +66,7 @@ const List<DropdownMenuItem> DropDownItemList = [
       child: Center(
           child: Text("スリラーバーク&シャボンディ諸島編",
               style: TextStyle(
+                  fontSize: 18,
                   color: Colors.black,
                   fontFamily: "Mont",
                   fontWeight: FontWeight.w700)))),
@@ -69,6 +75,7 @@ const List<DropdownMenuItem> DropDownItemList = [
       child: Center(
           child: Text("インペルダウン&マリンフォード編",
               style: TextStyle(
+                  fontSize: 18,
                   color: Colors.black,
                   fontFamily: "Mont",
                   fontWeight: FontWeight.w700)))),
@@ -77,6 +84,7 @@ const List<DropdownMenuItem> DropDownItemList = [
       child: Center(
           child: Text("魚人島&パンクハザード編",
               style: TextStyle(
+                  fontSize: 18,
                   color: Colors.black,
                   fontFamily: "Mont",
                   fontWeight: FontWeight.w700)))),
@@ -85,6 +93,7 @@ const List<DropdownMenuItem> DropDownItemList = [
       child: Center(
           child: Text("ドレスローザ編",
               style: TextStyle(
+                  fontSize: 18,
                   color: Colors.black,
                   fontFamily: "Mont",
                   fontWeight: FontWeight.w700)))),
@@ -93,6 +102,7 @@ const List<DropdownMenuItem> DropDownItemList = [
       child: Center(
           child: Text("ゾウ&ホールケーキアイランド編",
               style: TextStyle(
+                  fontSize: 18,
                   color: Colors.black,
                   fontFamily: "Mont",
                   fontWeight: FontWeight.w700)))),
@@ -101,6 +111,7 @@ const List<DropdownMenuItem> DropDownItemList = [
       child: Center(
           child: Text("ワノ国編",
               style: TextStyle(
+                  fontSize: 18,
                   color: Colors.black,
                   fontFamily: "Mont",
                   fontWeight: FontWeight.w700)))),
